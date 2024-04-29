@@ -5,8 +5,6 @@ import java.util.Scanner;
 import javax.print.CancelablePrintJob;
 
 public class InterfazInmobiliaria {
-
-	//No puedo subir a git desde Git Bash, prueba nro 2millones :)
 	
 	private static Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av. Rivadavia",
 			"sandovalInmobiliaria@mail.com", 1122334455);
@@ -97,7 +95,7 @@ public class InterfazInmobiliaria {
 	}
 
 	private static void comprarPropiedad(Integer dniComprador, String codigoPropiedad) {
-		Cliente comprador = inmobiliariaActual.buscarClientePorDni(dniComprador);
+		Cliente comprador = inmobiliariaActual.buscarClienePorDni(dniComprador);
 		if (comprador != null) {
 			Casa casaAComprar = inmobiliariaActual.buscarCasaPorCodigo(codigoPropiedad);
 			if (casaAComprar != null && casaAComprar.estaDisponibleParaVenta()) {
@@ -231,36 +229,26 @@ public class InterfazInmobiliaria {
 		switch (tipoPropiedad) {
 		case 1:
 			System.out.println("\nCasas:");
-			inmobiliariaActual.ordenarCasasPorUbicacion();
+			inmobiliariaActual.ordenarCasasPorLocalidad();
 			break;
 		case 2:
 			System.out.println("\nDepartamentos:");
-			inmobiliariaActual.ordenarDepartamentosPorUbicacion();
+			inmobiliariaActual.ordenarDepartamentosPorLocalidad();
 			break;
 		case 3:
 			System.out.println("\nPHs:");
-			inmobiliariaActual.ordenarPhsPorUbicacion();
+			inmobiliariaActual.ordenarPhsPorLocalidad();
 			break;
 		case 4:
 			System.out.println("\nTerrenos:");
-			inmobiliariaActual.ordenarTerrenosPorUbicacion();
+			inmobiliariaActual.ordenarTerrenosPorLocalidad();
 			break;
 		case 5:
 			System.out.println("\nCampos:");
-			inmobiliariaActual.ordenarCamposPorUbicacion();
+			inmobiliariaActual.ordenarCamposPorLocalidad();
 			break;
 		case 6:
 			System.out.println("\nAún no podemos ordenar todas las propiedades.");
-			System.out.println("Casas:");
-			inmobiliariaActual.ordenarCasasPorUbicacion();
-			System.out.println("Departamentos:");
-			inmobiliariaActual.ordenarDepartamentosPorUbicacion();
-			System.out.println("PHs:");
-			inmobiliariaActual.ordenarPhsPorUbicacion();
-			System.out.println("Terrenos:");
-			inmobiliariaActual.ordenarTerrenosPorUbicacion();
-			System.out.println("Campos:");
-			inmobiliariaActual.ordenarCamposPorUbicacion();
 		}
 		System.out.println("\n¿Deseas ordenar otro tipo de propiedad? (true/false): ");
 		Boolean ordenarOtroTipoPropiedad = teclado.nextBoolean();
@@ -285,7 +273,7 @@ public class InterfazInmobiliaria {
 			break;
 		case 3:
 			System.out.println("\nPHs:");
-			inmobiliariaActual.ordenarPHsPorPrecio();
+			inmobiliariaActual.ordenarPhsPorPrecio();
 			break;
 		case 4:
 			System.out.println("\nTerrenos:");
@@ -302,7 +290,7 @@ public class InterfazInmobiliaria {
 			System.out.println("Departamentos:");
 			inmobiliariaActual.ordenarDepartamentosPorPrecio();
 			System.out.println("PHs:");
-			inmobiliariaActual.ordenarPHsPorPrecio();
+			inmobiliariaActual.ordenarPhsPorPrecio();
 			System.out.println("Terrenos:");
 			inmobiliariaActual.ordenarTerrenosPorPrecio();
 			System.out.println("Campos:");
