@@ -98,8 +98,8 @@ public class InterfazInmobiliaria {
 		Cliente comprador = inmobiliariaActual.buscarClienePorDni(dniComprador);
 		if (comprador != null) {
 			Casa casaAComprar = inmobiliariaActual.buscarCasaPorCodigo(codigoPropiedad);
-			if (casaAComprar != null && casaAComprar.estaDisponibleParaVenta()) {
-				comprador.comprarCasa(casaAComprar);
+			if (casaAComprar != null && casaAComprar.estaDisponiblePara(TipoDeOperacion.VENTA)) {
+				comprador.comprarPropiedad(casaAComprar);
 				System.out.println("La casa ha sido comprada con éxito.");
 			} else {
 				System.out.println("La propiedad no está disponible para la venta o no existe.");

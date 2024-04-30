@@ -8,7 +8,6 @@ import java.util.LinkedList;
 import org.junit.Test;
 
 public class PruebaUnitariaAutomatizada {
-	// desarrollar desde test
 
 	@Test
 	public void queSePuedaAgregarUnaCasaYLaDimensionDelArraySeaLaMinimaPosible() {
@@ -305,8 +304,8 @@ public class PruebaUnitariaAutomatizada {
 		inmobiliariaActual.aniadirCasa(casa1);
 
 		// Validacion
-		assertTrue(casa1.estaDisponibleParaVenta());
-		assertFalse(casa1.estaDisponibleParaAlquiler());
+		assertTrue(casa1.estaDisponiblePara(TipoDeOperacion.VENTA));
+		assertFalse(casa1.estaDisponiblePara(TipoDeOperacion.ALQUILER));
 	}
 
 	@Test
