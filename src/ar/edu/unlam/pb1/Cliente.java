@@ -105,6 +105,14 @@ public class Cliente {
 		Cliente other = (Cliente) obj;
 		return Objects.equals(dni, other.dni);
 	}
+
+	@Override
+	public String toString() {
+		return "Cliente [dni=" + dni + ", nombre=" + nombre + ", apellido=" + apellido + ", tipoPropiedadInteres="
+				+ tipoPropiedadInteres + ", poseePropiedadParaPermuta=" + poseePropiedadParaPermuta
+				+ ", propiedadesCompradas=" + propiedadesCompradas + ", propiedadesAlquiladas=" + propiedadesAlquiladas
+				+ "]";
+	}
 	
 	
 
