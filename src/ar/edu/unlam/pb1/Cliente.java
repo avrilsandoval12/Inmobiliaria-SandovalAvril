@@ -2,6 +2,7 @@ package ar.edu.unlam.pb1;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 import javax.print.attribute.standard.DateTimeAtCompleted;
 
@@ -87,5 +88,24 @@ public class Cliente {
 			System.out.println("La propiedad no está disponible para alquilar.");
 		}
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(dni);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Cliente other = (Cliente) obj;
+		return Objects.equals(dni, other.dni);
+	}
+	
+	
 
 }

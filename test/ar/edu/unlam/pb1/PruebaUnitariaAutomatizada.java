@@ -21,7 +21,7 @@ public class PruebaUnitariaAutomatizada {
 
 		assertEquals(DIMENSION_DEL_ARRAY_ESPERADA, (Integer) inmobiliariaActual.getCasas().size());
 	}
-
+	
 	@Test
 	public void queSePuedanAgregarTresCasasYLaDimensionDelArraySeaTres() {
 		final Integer DIMENSION_DEL_ARRAY_ESPERADA = 3;
@@ -51,6 +51,49 @@ public class PruebaUnitariaAutomatizada {
 
 		assertEquals(DIMENSION_DEL_ARRAY_ESPERADA, (Integer) inmobiliariaActual.getClientes().size());
 	}
+	
+	@Test
+	public void queNoSePuedaAgregarUnClienteConDNINulo() {
+		Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av.Rivadavia", "sandoval@inmobiliaria.com",
+				1122334455);
+		Cliente clienteConDNINulo =  new Cliente(null, "Pablo", "Rodriguez", TiposDePropiedades.DEPARTAMENTO, false);
+		Boolean sePuedeAgregar = inmobiliariaActual.añadirCliente(clienteConDNINulo);
+		
+	    assertFalse(sePuedeAgregar);
+	}
+
+	@Test
+	public void queNoSePuedaAgregarDosClientesTotalmenteIguales() {
+		final Integer DIMENSION_DEL_ARRAY_ESPERADA = 1;
+
+		Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av.Rivadavia", "sandoval@inmobiliaria.com",
+				1122334455);
+		Cliente cliente1 = new Cliente(123, "Pablo", "Rodriguez", TiposDePropiedades.DEPARTAMENTO, false);
+		Cliente cliente2 = new Cliente(123, "Pablo", "Rodriguez", TiposDePropiedades.DEPARTAMENTO, false);
+
+
+		inmobiliariaActual.añadirCliente(cliente1);
+		inmobiliariaActual.añadirCliente(cliente2);
+
+
+		assertEquals(DIMENSION_DEL_ARRAY_ESPERADA, (Integer) inmobiliariaActual.getClientes().size());
+	}
+	
+	@Test
+	public void queNoSePuedaAgregarDosClientesConIgualDNI() {
+		final Integer DIMENSION_DEL_ARRAY_ESPERADA = 1;
+
+		Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av.Rivadavia", "sandoval@inmobiliaria.com",
+				1122334455);
+		Cliente cliente1 = new Cliente(123, "Pablo", "Rodriguez", TiposDePropiedades.DEPARTAMENTO, false);
+		Cliente cliente2 = new Cliente(123, "Miriam", "MArtinez", TiposDePropiedades.CASA, false);
+
+
+		inmobiliariaActual.añadirCliente(cliente1);
+		inmobiliariaActual.añadirCliente(cliente2);
+		
+		assertEquals(DIMENSION_DEL_ARRAY_ESPERADA, (Integer) inmobiliariaActual.getClientes().size());
+	}
 
 	@Test
 	public void queSePuedanAgregarTresClientesYLaDimensionDelArraySeaTres() {
@@ -58,9 +101,9 @@ public class PruebaUnitariaAutomatizada {
 
 		Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av.Rivadavia", "sandoval@inmobiliaria.com",
 				1122334455);
-		Cliente cliente1 = new Cliente(123, "Pablo", "Rodriguez", TiposDePropiedades.DEPARTAMENTO, false);
-		Cliente cliente2 = new Cliente(122, "Diego", "Diaz", TiposDePropiedades.CASA, false);
-		Cliente cliente3 = new Cliente(133, "Luisa", "Paez", TiposDePropiedades.PH, true);
+		Cliente cliente1 = new Cliente(111, "Pablo", "Rodriguez", TiposDePropiedades.DEPARTAMENTO, false);
+		Cliente cliente2 = new Cliente(222, "Diego", "Diaz", TiposDePropiedades.CASA, false);
+		Cliente cliente3 = new Cliente(333, "Luisa", "Paez", TiposDePropiedades.PH, true);
 
 		inmobiliariaActual.añadirCliente(cliente1);
 		inmobiliariaActual.añadirCliente(cliente2);

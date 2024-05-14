@@ -85,5 +85,3 @@ public class Propiedad {
     	return this.estaDisponible && this.tipoDeOperacion == tipoDeOperacion;
     }
 }
-
-//Cambie los arrays de Cliente por ArrayList, cambié los metodos para saber para que tipo de operación estaba disponible, por un método en Propiedad estaDisponiblePara, en Cliente solo hay método comprarPropiedad/alquilarPropiedad y getPropiedades alquiladas/compradas de un tipo

@@ -151,8 +151,12 @@ public class Inmobiliaria {
 
 	// Método para añadir un cliente
 	public Boolean añadirCliente(Cliente clienteNuevo) {
+		if (clienteNuevo == null || clienteNuevo.getDni() == null) {
+			return false;
+		}
 		return clientes.add(clienteNuevo);
 	}
+
 
 	// Métodos para buscar propiedades
 	public Casa buscarCasaPorCodigo(String codigo) {
