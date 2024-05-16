@@ -9,5 +9,12 @@ public class Casa extends Propiedad {
         super(calle, numero, localidad, precio, estaDisponible, tipoDeOperacion);
         setCodigo("CS" + contador++);
     }
-   
+
+	@Override
+	public String toString() {
+		return "Código: " + getCodigo() + "\nDirección: " + getCalle() + getNumero()
+				+ ", " + getLocalidad() + "\nPrecio: " + getPrecio() + "\nEstá disponible: "
+				+ getEstaDisponible() + "\nTipo de operación: " + getTipoDeOperacion();
+	}
+       
 }

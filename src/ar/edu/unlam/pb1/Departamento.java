@@ -30,4 +30,12 @@ public class Departamento extends Propiedad{
 		this.departamento = departamento;
 	}
 	
+	@Override
+	public String toString() {
+		return "Código: " + getCodigo() + "\nDirección: " + getCalle() + getNumero()
+				+ ", " + getLocalidad() + "\nPrecio: " + getPrecio() + "\nEstá disponible: "
+				+ getEstaDisponible() + "\nTipo de operación: " + getTipoDeOperacion() + "\nPiso: " + getPiso() + ", departamento: " + getDepartamento();
+	}
+	
+	
 }

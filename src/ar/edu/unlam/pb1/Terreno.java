@@ -19,5 +19,12 @@ public class Terreno extends Propiedad{
 	public void setMetrosCuadrados(Double metrosCuadrados) {
 		this.metrosCuadrados = metrosCuadrados;
 	}
+	
+	@Override
+	public String toString() {
+		return "Código: " + getCodigo() + "\nDirección: " + getCalle() + getNumero()
+				+ ", " + getLocalidad() + "\nPrecio: " + getPrecio() + "\nEstá disponible: "
+				+ getEstaDisponible() + "\nTipo de operación: " + getTipoDeOperacion() + "\nMetros cuadrados: " + getMetrosCuadrados();
+	}
 
 }

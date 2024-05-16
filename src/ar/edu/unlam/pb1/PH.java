@@ -20,4 +20,10 @@ public class PH extends Propiedad{
 		this.numeroDePH = numeroDePH;
 	}
 
+	@Override
+	public String toString() {
+		return "Código: " + getCodigo() + "\nDirección: " + getCalle() + getNumero()
+				+ ", " + getLocalidad() + "\nPrecio: " + getPrecio() + "\nEstá disponible: "
+				+ getEstaDisponible() + "\nTipo de operación: " + getTipoDeOperacion() + "\nNúmero del ph: " + getNumeroDePH();
+	}
 }

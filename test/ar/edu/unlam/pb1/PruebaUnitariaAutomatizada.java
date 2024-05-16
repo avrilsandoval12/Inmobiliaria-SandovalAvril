@@ -17,11 +17,11 @@ public class PruebaUnitariaAutomatizada {
 				1122334455);
 		Casa casa1 = new Casa("Alberdi", 640, "Haedo", 50000.0, true, TipoDeOperacion.VENTA);
 
-		inmobiliariaActual.aniadirCasa(casa1);
+		inmobiliariaActual.aniadirPropiedad(casa1);
 
 		assertEquals(DIMENSION_DEL_ARRAY_ESPERADA, (Integer) inmobiliariaActual.getCasas().size());
 	}
-	
+
 	@Test
 	public void queSePuedanAgregarTresCasasYLaDimensionDelArraySeaTres() {
 		final Integer DIMENSION_DEL_ARRAY_ESPERADA = 3;
@@ -32,9 +32,9 @@ public class PruebaUnitariaAutomatizada {
 		Casa casa2 = new Casa("Gaona", 500, "Ramos", 100000.0, true, TipoDeOperacion.VENTA);
 		Casa casa3 = new Casa("Peron", 100, "San Justo", 60000.0, true, TipoDeOperacion.VENTA);
 
-		inmobiliariaActual.aniadirCasa(casa1);
-		inmobiliariaActual.aniadirCasa(casa2);
-		inmobiliariaActual.aniadirCasa(casa3);
+		inmobiliariaActual.aniadirPropiedad(casa1);
+		inmobiliariaActual.aniadirPropiedad(casa2);
+		inmobiliariaActual.aniadirPropiedad(casa3);
 
 		assertEquals(DIMENSION_DEL_ARRAY_ESPERADA, (Integer) inmobiliariaActual.getCasas().size());
 	}
@@ -47,19 +47,19 @@ public class PruebaUnitariaAutomatizada {
 				1122334455);
 		Cliente cliente1 = new Cliente(123, "Pablo", "Rodriguez", TiposDePropiedades.DEPARTAMENTO, false);
 
-		inmobiliariaActual.añadirCliente(cliente1);
+		inmobiliariaActual.aniadirCliente(cliente1);
 
 		assertEquals(DIMENSION_DEL_ARRAY_ESPERADA, (Integer) inmobiliariaActual.getClientes().size());
 	}
-	
+
 	@Test
 	public void queNoSePuedaAgregarUnClienteConDNINulo() {
 		Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av.Rivadavia", "sandoval@inmobiliaria.com",
 				1122334455);
-		Cliente clienteConDNINulo =  new Cliente(null, "Pablo", "Rodriguez", TiposDePropiedades.DEPARTAMENTO, false);
-		Boolean sePuedeAgregar = inmobiliariaActual.añadirCliente(clienteConDNINulo);
-		
-	    assertFalse(sePuedeAgregar);
+		Cliente clienteConDNINulo = new Cliente(null, "Pablo", "Rodriguez", TiposDePropiedades.DEPARTAMENTO, false);
+		Boolean sePuedeAgregar = inmobiliariaActual.aniadirCliente(clienteConDNINulo);
+
+		assertFalse(sePuedeAgregar);
 	}
 
 	@Test
@@ -71,14 +71,12 @@ public class PruebaUnitariaAutomatizada {
 		Cliente cliente1 = new Cliente(123, "Pablo", "Rodriguez", TiposDePropiedades.DEPARTAMENTO, false);
 		Cliente cliente2 = new Cliente(123, "Pablo", "Rodriguez", TiposDePropiedades.DEPARTAMENTO, false);
 
-
-		inmobiliariaActual.añadirCliente(cliente1);
-		inmobiliariaActual.añadirCliente(cliente2);
-
+		inmobiliariaActual.aniadirCliente(cliente1);
+		inmobiliariaActual.aniadirCliente(cliente2);
 
 		assertEquals(DIMENSION_DEL_ARRAY_ESPERADA, (Integer) inmobiliariaActual.getClientes().size());
 	}
-	
+
 	@Test
 	public void queNoSePuedaAgregarDosClientesConIgualDNI() {
 		final Integer DIMENSION_DEL_ARRAY_ESPERADA = 1;
@@ -88,10 +86,9 @@ public class PruebaUnitariaAutomatizada {
 		Cliente cliente1 = new Cliente(123, "Pablo", "Rodriguez", TiposDePropiedades.DEPARTAMENTO, false);
 		Cliente cliente2 = new Cliente(123, "Miriam", "MArtinez", TiposDePropiedades.CASA, false);
 
+		inmobiliariaActual.aniadirCliente(cliente1);
+		inmobiliariaActual.aniadirCliente(cliente2);
 
-		inmobiliariaActual.añadirCliente(cliente1);
-		inmobiliariaActual.añadirCliente(cliente2);
-		
 		assertEquals(DIMENSION_DEL_ARRAY_ESPERADA, (Integer) inmobiliariaActual.getClientes().size());
 	}
 
@@ -105,9 +102,9 @@ public class PruebaUnitariaAutomatizada {
 		Cliente cliente2 = new Cliente(222, "Diego", "Diaz", TiposDePropiedades.CASA, false);
 		Cliente cliente3 = new Cliente(333, "Luisa", "Paez", TiposDePropiedades.PH, true);
 
-		inmobiliariaActual.añadirCliente(cliente1);
-		inmobiliariaActual.añadirCliente(cliente2);
-		inmobiliariaActual.añadirCliente(cliente3);
+		inmobiliariaActual.aniadirCliente(cliente1);
+		inmobiliariaActual.aniadirCliente(cliente2);
+		inmobiliariaActual.aniadirCliente(cliente3);
 
 		assertEquals(DIMENSION_DEL_ARRAY_ESPERADA, (Integer) inmobiliariaActual.getClientes().size());
 	}
@@ -121,41 +118,35 @@ public class PruebaUnitariaAutomatizada {
 		Cliente cliente1 = new Cliente(123, "Pablo", "Rodriguez", TiposDePropiedades.DEPARTAMENTO, false);
 		Cliente cliente2 = new Cliente(122, "Diego", "Diaz", TiposDePropiedades.CASA, false);
 
-		inmobiliariaActual.añadirCliente(cliente1);
-		inmobiliariaActual.añadirCliente(cliente2);
-		inmobiliariaActual.añadirCliente(cliente2);
+		inmobiliariaActual.aniadirCliente(cliente1);
+		inmobiliariaActual.aniadirCliente(cliente2);
+		inmobiliariaActual.aniadirCliente(cliente2);
 
 		assertEquals(DIMENSION_DEL_ARRAY_ESPERADA, (Integer) inmobiliariaActual.getClientes().size());
 	}
 
 	@Test
 	public void queSePuedaDarDeAltaUnaCasaEnLaInmobiliaria() {
-		// Preparacion
 		Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av.Rivadavia", "sandoval@inmobiliaria.com",
 				1122334455);
 		Casa casa1 = new Casa("Alberdi", 640, "Haedo", 50000.0, true, TipoDeOperacion.VENTA);
 
-		// Ejecucion
-		inmobiliariaActual.aniadirCasa(casa1);
+		inmobiliariaActual.aniadirPropiedad(casa1);
 
-		// Validacion
 		assertNotNull(inmobiliariaActual.getCasas());
 		assertTrue(casa1.getEstaDisponible());
 	}
 
 	@Test
 	public void queSePuedanDarDeAltaDosCasasEnLaInmobiliaria() {
-		// Preparacion
 		Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av.Rivadavia", "sandoval@inmobiliaria.com",
 				1122334455);
 		Casa casa1 = new Casa("Alberdi", 640, "Haedo", 50000.0, true, TipoDeOperacion.VENTA);
 		Casa casa2 = new Casa("Gaona", 500, "Ramos", 100000.0, true, TipoDeOperacion.VENTA);
 
-		// Ejecucion
-		inmobiliariaActual.aniadirCasa(casa1);
-		inmobiliariaActual.aniadirCasa(casa2);
+		inmobiliariaActual.aniadirPropiedad(casa1);
+		inmobiliariaActual.aniadirPropiedad(casa2);
 
-		// Validacion
 		assertNotNull(inmobiliariaActual.getCasas());
 		assertEquals(2, inmobiliariaActual.getCasas().size());
 		assertTrue(casa1.getEstaDisponible());
@@ -164,20 +155,17 @@ public class PruebaUnitariaAutomatizada {
 
 	@Test
 	public void queSePuedanOrdenarLasCasasPorPrecio() {
-		// Preparacion
 		Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av.Rivadavia", "sandoval@inmobiliaria.com",
 				1122334455);
 		Casa casa1 = new Casa("Alberdi", 640, "Haedo", 50000.0, true, TipoDeOperacion.VENTA);
 		Casa casa2 = new Casa("Gaona", 500, "Ramos", 100000.0, true, TipoDeOperacion.VENTA);
 		Casa casa3 = new Casa("Peron", 100, "San Justo", 60000.0, true, TipoDeOperacion.VENTA);
 
-		// Ejecucion
-		inmobiliariaActual.aniadirCasa(casa1);
-		inmobiliariaActual.aniadirCasa(casa2);
-		inmobiliariaActual.aniadirCasa(casa3);
+		inmobiliariaActual.aniadirPropiedad(casa1);
+		inmobiliariaActual.aniadirPropiedad(casa2);
+		inmobiliariaActual.aniadirPropiedad(casa3);
 		ArrayList<Casa> casasOrdenadas = inmobiliariaActual.ordenarCasasPorPrecio();
 
-		// Validacion
 		assertEquals(casa1, casasOrdenadas.get(0));
 		assertEquals(casa3, casasOrdenadas.get(1));
 		assertEquals(casa2, casasOrdenadas.get(2));
@@ -185,23 +173,19 @@ public class PruebaUnitariaAutomatizada {
 
 	@Test
 	public void queSePuedaDarDeAltaUnDepartamentoEnLaInmobiliaria() {
-		// Preparacion
 		Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av.Rivadavia", "sandoval@inmobiliaria.com",
 				1122334455);
 		Departamento departamento1 = new Departamento("Alberdi", 640, "Haedo", 2, 'A', 50000.0, true,
 				TipoDeOperacion.ALQUILER);
 
-		// Ejecucion
-		inmobiliariaActual.aniadirDepartamento(departamento1);
+		inmobiliariaActual.aniadirPropiedad(departamento1);
 
-		// Validacion
 		assertNotNull(inmobiliariaActual.getDepartamentos());
 		assertTrue(departamento1.getEstaDisponible());
 	}
 
 	@Test
 	public void queSePuedanDarDeAltaDosDepartamentoEnLaInmobiliaria() {
-		// Preparacion
 		Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av.Rivadavia", "sandoval@inmobiliaria.com",
 				1122334455);
 		Departamento departamento1 = new Departamento("Alberdi", 640, "Haedo", 2, 'A', 50000.0, true,
@@ -209,40 +193,35 @@ public class PruebaUnitariaAutomatizada {
 		Departamento departamento2 = new Departamento("Cavia", 222, "Lomas del mirador", 2, 'B', 60000.0, true,
 				TipoDeOperacion.VENTA);
 
-		// Ejecucion
-		inmobiliariaActual.aniadirDepartamento(departamento1);
-		inmobiliariaActual.aniadirDepartamento(departamento2);
+		inmobiliariaActual.aniadirPropiedad(departamento1);
+		inmobiliariaActual.aniadirPropiedad(departamento2);
 
-		// Validacion
 		assertNotNull(inmobiliariaActual.getDepartamentos());
 		assertEquals(2, inmobiliariaActual.getDepartamentos().size());
 		assertTrue(departamento1.getEstaDisponible());
 		assertTrue(departamento2.getEstaDisponible());
 	}
 
-	@Test // avisa que se debe ejecutar bajo el entorno de JUnit
+	@Test
 	public void queSiTengoTresCasasDeCincuentaCienYSesentaMilElPromedioSeaSetentaMil() {
-
-		// Preparacion de datos: necesitamos crear la inmobiliaria, las casas
+		Integer tipoPropiedadDeLaQueCalcularPromedio = 1;
 		Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av. Rivadavia", "sandovalInmobiliaria@mail.com",
 				1122334455);
 		Casa casa1 = new Casa("Alberdi", 640, "Haedo", 50000.0, true, TipoDeOperacion.VENTA);
 		Casa casa2 = new Casa("Gaona", 500, "Ramos", 100000.0, true, TipoDeOperacion.VENTA);
 		Casa casa3 = new Casa("Peron", 100, "San Justo", 60000.0, true, TipoDeOperacion.VENTA);
 
-		// Ejecucion
-		inmobiliariaActual.aniadirCasa(casa1);
-		inmobiliariaActual.aniadirCasa(casa2);
-		inmobiliariaActual.aniadirCasa(casa3);
+		inmobiliariaActual.aniadirPropiedad(casa1);
+		inmobiliariaActual.aniadirPropiedad(casa2);
+		inmobiliariaActual.aniadirPropiedad(casa3);
 
-		// validacion
-		assertEquals(70000.0, inmobiliariaActual.calcularPrecioPromedioDeCasas(), 0.01);
+		assertEquals(70000.0, inmobiliariaActual.calcularPromedioPrecio(tipoPropiedadDeLaQueCalcularPromedio), 0.01);
 	}
 
 	@Test
 	public void queSiTengoTresDepartamentosDeCincuentaCienYSesentaMilElPromedioSeaSetentaMil() {
+		Integer tipoPropiedadDeLaQueCalcularPromedio = 2;
 
-		// Preparacion de datos: necesitamos crear la inmobiliaria, las casas
 		Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av. Rivadavia", "sandovalInmobiliaria@mail.com",
 				1122334455);
 		Departamento departamento1 = new Departamento("Alberdi", 640, "Haedo", 1, 'A', 50000.0, true,
@@ -252,30 +231,24 @@ public class PruebaUnitariaAutomatizada {
 		Departamento departamento3 = new Departamento("Peron", 100, "San Justo", 1, 'B', 60000.0, true,
 				TipoDeOperacion.VENTA);
 
-		// Ejecucion
-		inmobiliariaActual.aniadirDepartamento(departamento1);
-		inmobiliariaActual.aniadirDepartamento(departamento2);
-		inmobiliariaActual.aniadirDepartamento(departamento3);
+		inmobiliariaActual.aniadirPropiedad(departamento1);
+		inmobiliariaActual.aniadirPropiedad(departamento2);
+		inmobiliariaActual.aniadirPropiedad(departamento3);
 
-		// validacion
-		assertEquals(70000.0, inmobiliariaActual.calcularPrecioPromedioDeDepartamentos(), 0.01);
+		assertEquals(70000.0, inmobiliariaActual.calcularPromedioPrecio(tipoPropiedadDeLaQueCalcularPromedio), 0.01);
 	}
 
 	@Test
 	public void queSiNoTengoCasasElPrecioPromedioDeCero() {
-
-		// Preparacion de datos
+		Integer tipoPropiedadDeLaQueCalcularPromedio = 1;
 		Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av. Rivadavia", "sandovalInmobiliaria@mail.com",
 				1122334455);
 
-		// Ejecucion
-		// validacion
-		assertEquals(0.0, inmobiliariaActual.calcularPrecioPromedioDeCasas(), 0.01);
+		assertEquals(0.0, inmobiliariaActual.calcularPromedioPrecio(tipoPropiedadDeLaQueCalcularPromedio), 0.01);
 	}
 
 	@Test
 	public void queSiBuscoUnaCasaPorRangoDePrecioLaEncuentreCorrectamente() {
-		// Preparacion
 		Double precioMinimo = 0.0;
 		Double precioMaximo = 60000.0;
 
@@ -286,87 +259,54 @@ public class PruebaUnitariaAutomatizada {
 		Casa casa2 = new Casa("Gaona", 500, "Ramos", 100000.0, true, TipoDeOperacion.VENTA);
 		Casa casa3 = new Casa("Peron", 100, "San Justo", 60000.0, true, TipoDeOperacion.VENTA);
 
-		// Ejecucion
-		inmobiliariaActual.aniadirCasa(casa1);
-		inmobiliariaActual.aniadirCasa(casa2);
-		inmobiliariaActual.aniadirCasa(casa3);
+		inmobiliariaActual.aniadirPropiedad(casa1);
+		inmobiliariaActual.aniadirPropiedad(casa2);
+		inmobiliariaActual.aniadirPropiedad(casa3);
 
 		LinkedList<Casa> casasEncontradasDentroRango = inmobiliariaActual.buscarCasasPorRangoDePrecio(precioMinimo,
 				precioMaximo);
 
-		// Validacion
 		assertNotNull(casasEncontradasDentroRango);
 		assertEquals(2, casasEncontradasDentroRango.size());
 
 	}
 
 	@Test
-	public void queSiBuscoUnaCasaPorRangoDePrecioYNoSeEncuentraNingunaElArrayResultadoEsteVacio() {
-		// Preparacion
-		Double precioMinimo = 0.0;
-		Double precioMaximo = 40000.0;
-		Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av.Rivadavia", "sandoval@inmobiliaria.com",
-				1122334455);
-		Casa casa1 = new Casa("Alberdi", 640, "Haedo", 50000.0, true, TipoDeOperacion.VENTA);
-		Casa casa2 = new Casa("Gaona", 500, "Ramos", 100000.0, true, TipoDeOperacion.VENTA);
-		Casa casa3 = new Casa("Peron", 100, "San Justo", 60000.0, true, TipoDeOperacion.VENTA);
-
-		// Ejecucion
-		inmobiliariaActual.aniadirCasa(casa1);
-		inmobiliariaActual.aniadirCasa(casa2);
-		inmobiliariaActual.aniadirCasa(casa3);
-		LinkedList<Casa> casasEncontradasDentroRango = inmobiliariaActual.buscarCasasPorRangoDePrecio(precioMinimo,
-				precioMaximo);
-
-		// Validacion
-		assertTrue(casasEncontradasDentroRango.isEmpty());
-	}
-
-	@Test
 	public void queSiUnaCasaEstaDisponibleElMetodoGetEstaDisponibilidadDeTrue() {
-		// Preparacion
 		Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av.Rivadavia", "sandoval@inmobiliaria.com",
 				1122334455);
 		Casa casa1 = new Casa("Alberdi", 640, "Haedo", 50000.0, true, TipoDeOperacion.VENTA);
 
-		// Ejecucion
-		inmobiliariaActual.aniadirCasa(casa1);
+		inmobiliariaActual.aniadirPropiedad(casa1);
 
-		// Validacion
 		assertTrue(casa1.getEstaDisponible());
 	}
 
 	@Test
 	public void queSiUnaCasaEstaALaVentaDeTrueParaVentaYFalseParaAlquiler() {
-		// Preparacion
 		Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av.Rivadavia", "sandoval@inmobiliaria.com",
 				1122334455);
 		Casa casa1 = new Casa("Alberdi", 640, "Haedo", 50000.0, true, TipoDeOperacion.VENTA);
 
-		// Ejecucion
-		inmobiliariaActual.aniadirCasa(casa1);
+		inmobiliariaActual.aniadirPropiedad(casa1);
 
-		// Validacion
 		assertTrue(casa1.estaDisponiblePara(TipoDeOperacion.VENTA));
 		assertFalse(casa1.estaDisponiblePara(TipoDeOperacion.ALQUILER));
 	}
 
 	@Test
 	public void queSePuedanOrdenarLasCasasPorLocalidad() {
-		// Preparacion
 		Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av.Rivadavia", "sandoval@inmobiliaria.com",
 				1122334455);
 		Casa casa1 = new Casa("Alberdi", 640, "Haedo", 50000.0, true, TipoDeOperacion.VENTA);
 		Casa casa2 = new Casa("Gaona", 500, "Ramos", 100000.0, true, TipoDeOperacion.VENTA);
 		Casa casa3 = new Casa("Peron", 100, "San Justo", 60000.0, true, TipoDeOperacion.VENTA);
 
-		// Ejecucion
-		inmobiliariaActual.aniadirCasa(casa1);
-		inmobiliariaActual.aniadirCasa(casa2);
-		inmobiliariaActual.aniadirCasa(casa3);
+		inmobiliariaActual.aniadirPropiedad(casa1);
+		inmobiliariaActual.aniadirPropiedad(casa2);
+		inmobiliariaActual.aniadirPropiedad(casa3);
 		ArrayList<Casa> casasOrdenadas = inmobiliariaActual.ordenarCasasPorLocalidad();
 
-		// Validacion
 		assertEquals(casa1, casasOrdenadas.get(0));
 		assertEquals(casa2, casasOrdenadas.get(1));
 		assertEquals(casa3, casasOrdenadas.get(2));
@@ -382,16 +322,15 @@ public class PruebaUnitariaAutomatizada {
 		Casa casa2 = new Casa("Gaona", 500, "Ramos", 100000.0, true, TipoDeOperacion.VENTA);
 		Casa casa3 = new Casa("Peron", 100, "San Justo", 60000.0, true, TipoDeOperacion.VENTA);
 
-		inmobiliariaActual.aniadirCasa(casa1);
-		inmobiliariaActual.aniadirCasa(casa2);
-		inmobiliariaActual.aniadirCasa(casa3);
-		
+		inmobiliariaActual.aniadirPropiedad(casa1);
+		inmobiliariaActual.aniadirPropiedad(casa2);
+		inmobiliariaActual.aniadirPropiedad(casa3);
 		ArrayList<Casa> casasEncontradas = inmobiliariaActual.buscarCasasPorLocalidad(localidadDeseada);
 
-	    assertFalse(casasEncontradas.isEmpty());
-	    assertEquals(cantidadCasasEncontradas, (Integer)casasEncontradas.size());
+		assertFalse(casasEncontradas.isEmpty());
+		assertEquals(cantidadCasasEncontradas, (Integer) casasEncontradas.size());
 	}
-	
+
 	@Test
 	public void queSiBuscoCasasUnaLocalidadEspecificaYEncuentraDosQueCoincidanDentroDeLaListaLasDevuelva() {
 		String localidadDeseada = "Haedo";
@@ -402,56 +341,88 @@ public class PruebaUnitariaAutomatizada {
 		Casa casa2 = new Casa("Gaona", 500, "Haedo", 100000.0, true, TipoDeOperacion.VENTA);
 		Casa casa3 = new Casa("Peron", 100, "San Justo", 60000.0, true, TipoDeOperacion.VENTA);
 
-		inmobiliariaActual.aniadirCasa(casa1);
-		inmobiliariaActual.aniadirCasa(casa2);
-		inmobiliariaActual.aniadirCasa(casa3);
-		
+		inmobiliariaActual.aniadirPropiedad(casa1);
+		inmobiliariaActual.aniadirPropiedad(casa2);
+		inmobiliariaActual.aniadirPropiedad(casa3);
 		ArrayList<Casa> casasEncontradas = inmobiliariaActual.buscarCasasPorLocalidad(localidadDeseada);
 
-	    assertFalse(casasEncontradas.isEmpty());
-	    assertEquals(cantidadCasasEncontradas, (Integer)casasEncontradas.size());
+		assertFalse(casasEncontradas.isEmpty());
+		assertEquals(cantidadCasasEncontradas, (Integer) casasEncontradas.size());
 	}
-	
-//	En realidad se puede vender la misma propiedad por distintos vendedores,
-//  por eso este test no sería válido
-//
-//	@Test
-//	public void queNoSePuedanDarDeAltaDosCasasConUnaMismaDireccion() {
-//		// Preparacion
-//		Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av.Rivadavia", "sandoval@inmobiliaria.com",
-//				1122334455);
-//		Casa casa1 = new Casa("Gascon", 500, "Ramos", 50000.0, true, TipoDeOperacion.VENTA);
-//		Casa casa2 = new Casa("Gascon", 500, "Ramos", 100000.0, true, TipoDeOperacion.VENTA);
-//
-//		// Ejecucion
-//		inmobiliariaActual.aniadirCasa(casa1);
-//		inmobiliariaActual.aniadirCasa(casa2);
-//
-//		// Validacion
-//		assertNotNull(inmobiliariaActual.getCasas());
-//		assertTrue(casa1.getEstaDisponible());
-//		assertEquals(1, inmobiliariaActual.getCasas());
-//	}
-//	
-// @Test
-//	public void queNoSePuedanDarDeAltaDosDepartamentosConUnaMismaDireccion() {
-//		// Preparacion
-//		Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av.Rivadavia", "sandoval@inmobiliaria.com",
-//				1122334455);
-//		Departamento departamento1 = new Departamento("Cavia", 222, "Lomas del mirador", 2, 'B', 50000.0, true,
-//				TipoDeOperacion.ALQUILER);
-//		Departamento departamento2 = new Departamento("Cavia", 222, "Lomas del mirador", 2, 'B', 75000.0, true,
-//				TipoDeOperacion.VENTA);
-//
-//		// Ejecucion
-//		inmobiliariaActual.aniadirDepartamento(departamento1);
-//		inmobiliariaActual.aniadirDepartamento(departamento2);
-//
-//		// Validacion
-//		assertNotNull(inmobiliariaActual.getDepartamentos());
-//		assertTrue(departamento1.getEstaDisponible());
-//		assertEquals(1, inmobiliariaActual.getDepartamentos());
-//
-//	}
 
+	@Test
+	public void queLaBusquedaPorRangoDePrecioDeMeArrojeUnaListaNoNuloSiAplicanResultados() {
+		Integer cantidadCasasEncontradas = 2;
+		Double precioMinimo = 55000.0;
+		Double precioMaximo = 150000.0;
+		Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av.Rivadavia", "sandoval@inmobiliaria.com",
+				1122334455);
+		Casa casa1 = new Casa("Alberdi", 640, "Haedo", 50000.0, true, TipoDeOperacion.VENTA);
+		Casa casa2 = new Casa("Gaona", 500, "Haedo", 100000.0, true, TipoDeOperacion.VENTA);
+		Casa casa3 = new Casa("Peron", 100, "San Justo", 60000.0, true, TipoDeOperacion.VENTA);
+
+		inmobiliariaActual.aniadirPropiedad(casa1);
+		inmobiliariaActual.aniadirPropiedad(casa2);
+		inmobiliariaActual.aniadirPropiedad(casa3);
+		LinkedList<Casa> casasEncontradas = inmobiliariaActual.buscarCasasPorRangoDePrecio(precioMinimo, precioMaximo);
+
+		assertNotNull(casasEncontradas);
+		assertEquals(cantidadCasasEncontradas, (Integer) casasEncontradas.size());
+	}
+
+	@Test
+	public void queLaBusquedaPorRangoDePrecioDeCasasMeArrojeUnaListaNuloSiNoAplicanResultados() {
+		Double precioMinimo = 10000.0;
+		Double precioMaximo = 40000.0;
+		Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av.Rivadavia", "sandoval@inmobiliaria.com",
+				1122334455);
+		Casa casa1 = new Casa("Alberdi", 640, "Haedo", 50000.0, true, TipoDeOperacion.VENTA);
+		Casa casa2 = new Casa("Gaona", 500, "Haedo", 100000.0, true, TipoDeOperacion.VENTA);
+		Casa casa3 = new Casa("Peron", 100, "San Justo", 60000.0, true, TipoDeOperacion.VENTA);
+
+		inmobiliariaActual.aniadirPropiedad(casa1);
+		inmobiliariaActual.aniadirPropiedad(casa2);
+		inmobiliariaActual.aniadirPropiedad(casa3);
+
+		LinkedList<Casa> casasEncontradas = inmobiliariaActual.buscarCasasPorRangoDePrecio(precioMinimo, precioMaximo);
+
+		assertNull(casasEncontradas);
+	}
+
+	@Test
+	public void queLaBusquedaDePropiedadesPorVentaMeArrojeUnaLista() {
+		Integer cantidadCasasEncontradas = 2;
+		TipoDeOperacion operacionDeseada = TipoDeOperacion.VENTA;
+		Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av.Rivadavia", "sandoval@inmobiliaria.com",
+				1122334455);
+		Casa casa1 = new Casa("Alberdi", 640, "Haedo", 50000.0, true, TipoDeOperacion.ALQUILER);
+		Casa casa2 = new Casa("Gaona", 500, "Haedo", 100000.0, true, TipoDeOperacion.VENTA);
+		Casa casa3 = new Casa("Peron", 100, "San Justo", 60000.0, true, TipoDeOperacion.VENTA);
+
+		inmobiliariaActual.aniadirPropiedad(casa1);
+		inmobiliariaActual.aniadirPropiedad(casa2);
+		inmobiliariaActual.aniadirPropiedad(casa3);
+		ArrayList<Casa> casasEncontradas = inmobiliariaActual.buscarCasasPorOperacion(operacionDeseada);
+
+		assertNotNull(casasEncontradas);
+		assertEquals(cantidadCasasEncontradas, (Integer) casasEncontradas.size());
+	}
+
+	@Test
+	public void queLaBusquedaDePropiedadesPorVentaMeArrojeUnaListaNuloSiNoAplicanResultados() {
+		TipoDeOperacion operacionDeseada = TipoDeOperacion.VENTA;
+		Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av.Rivadavia", "sandoval@inmobiliaria.com",
+				1122334455);
+		Casa casa1 = new Casa("Alberdi", 640, "Haedo", 50000.0, true, TipoDeOperacion.ALQUILER);
+		Casa casa2 = new Casa("Gaona", 500, "Haedo", 100000.0, true, TipoDeOperacion.ALQUILER);
+		Casa casa3 = new Casa("Peron", 100, "San Justo", 60000.0, true, TipoDeOperacion.ALQUILER);
+
+		inmobiliariaActual.aniadirPropiedad(casa1);
+		inmobiliariaActual.aniadirPropiedad(casa2);
+		inmobiliariaActual.aniadirPropiedad(casa3);
+		ArrayList<Casa> casasEncontradas = inmobiliariaActual.buscarCasasPorOperacion(operacionDeseada);
+
+		assertNull(casasEncontradas);
+
+	}
 }

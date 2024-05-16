@@ -1,8 +1,9 @@
 package ar.edu.unlam.pb1;
 
+import java.util.Objects;
+
 public abstract class Propiedad {
 
-	private static Integer contador = 1;
 	private String codigo;
 	private String calle;
 	private Integer numero;
@@ -84,4 +85,23 @@ public abstract class Propiedad {
     public Boolean estaDisponiblePara(TipoDeOperacion tipoDeOperacion) {
     	return this.estaDisponible && this.tipoDeOperacion == tipoDeOperacion;
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(codigo);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Propiedad other = (Propiedad) obj;
+		return Objects.equals(codigo, other.codigo);
+	}
+    
+    
 }

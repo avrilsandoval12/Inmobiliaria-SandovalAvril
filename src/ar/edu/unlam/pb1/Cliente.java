@@ -7,7 +7,6 @@ import java.util.Objects;
 import javax.print.attribute.standard.DateTimeAtCompleted;
 
 public class Cliente {
-	//arreglar los metodos
 
 	private Integer dni;
 	private String nombre;
@@ -108,10 +107,9 @@ public class Cliente {
 
 	@Override
 	public String toString() {
-		return "Cliente [dni=" + dni + ", nombre=" + nombre + ", apellido=" + apellido + ", tipoPropiedadInteres="
-				+ tipoPropiedadInteres + ", poseePropiedadParaPermuta=" + poseePropiedadParaPermuta
-				+ ", propiedadesCompradas=" + propiedadesCompradas + ", propiedadesAlquiladas=" + propiedadesAlquiladas
-				+ "]";
+		return "Cliente: DNI: " + dni + "\nNombre Completo: "  + apellido + nombre + "\nTipo de propiedad de interés: "
+				+ tipoPropiedadInteres + "\nPosee propiedad para permutar:" + poseePropiedadParaPermuta
+				+ "\nPropiedades compradas: " + propiedadesCompradas + "\nPropiedades alquiladas=" + propiedadesAlquiladas;
 	}
 	
 	
