@@ -16,14 +16,24 @@ public class Cliente {
 	private ArrayList<Propiedad> propiedadesCompradas;
 	private ArrayList<Propiedad> propiedadesAlquiladas;
 
-
 	public Cliente(Integer dni, String nombre, String apellido, TiposDePropiedades tipoPropiedadInteres,
 			Boolean poseePropiedadParaPermuta) {
+		if (dni == null) {
+			throw new IllegalArgumentException("El DNI no puede ser nulo");
+		}
+		if (nombre == null || nombre.isEmpty()) {
+			throw new IllegalArgumentException("El nombre no puede ser nulo o vacío");
+		}
+		if (apellido == null || apellido.isEmpty()) {
+			throw new IllegalArgumentException("El apellido no puede ser nulo o vacío");
+		}
 		this.dni = dni;
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.tipoPropiedadInteres = tipoPropiedadInteres;
 		this.poseePropiedadParaPermuta = poseePropiedadParaPermuta;
+		this.propiedadesCompradas = new ArrayList<>();
+		this.propiedadesAlquiladas = new ArrayList<>();
 	}
 
 	public Integer getDni() {
@@ -65,27 +75,21 @@ public class Cliente {
 	public void setPoseePropiedadParaPermuta(Boolean poseePropiedadParaPermuta) {
 		this.poseePropiedadParaPermuta = poseePropiedadParaPermuta;
 	}
-
-	public void comprarPropiedad(Propiedad propiedad) {
-		if (propiedad.estaDisponiblePara(TipoDeOperacion.VENTA)) {
-			this.propiedadesCompradas.add(propiedad);
-			
-			propiedad.setEstaDisponible(false);
-			System.out.println("La propiedad ha sido comprada exitosamente.");
-		} else {
-			System.out.println("La propiedad no está disponible para venta.");
-		}
-	}
 	
-	public void alquilarPropiedad(Propiedad propiedad) {
-		if (propiedad.estaDisponiblePara(TipoDeOperacion.ALQUILER)) {
-			this.propiedadesAlquiladas.add(propiedad);
-			
-			propiedad.setEstaDisponible(false);
-			System.out.println("La propiedad ha sido alquilada exitosamente.");
-		} else {
-			System.out.println("La propiedad no está disponible para alquilar.");
-		}
+	public ArrayList<Propiedad> getPropiedadesCompradas() {
+		return propiedadesCompradas;
+	}
+
+	public void setPropiedadesCompradas(ArrayList<Propiedad> propiedadesCompradas) {
+		this.propiedadesCompradas = propiedadesCompradas;
+	}
+
+	public ArrayList<Propiedad> getPropiedadesAlquiladas() {
+		return propiedadesAlquiladas;
+	}
+
+	public void setPropiedadesAlquiladas(ArrayList<Propiedad> propiedadesAlquiladas) {
+		this.propiedadesAlquiladas = propiedadesAlquiladas;
 	}
 
 	@Override
@@ -107,11 +111,10 @@ public class Cliente {
 
 	@Override
 	public String toString() {
-		return "Cliente: DNI: " + dni + "\nNombre Completo: "  + apellido + nombre + "\nTipo de propiedad de interés: "
+		return "Cliente: DNI: " + dni + "\nNombre Completo: " + apellido + nombre + "\nTipo de propiedad de interés: "
 				+ tipoPropiedadInteres + "\nPosee propiedad para permutar:" + poseePropiedadParaPermuta
-				+ "\nPropiedades compradas: " + propiedadesCompradas + "\nPropiedades alquiladas=" + propiedadesAlquiladas;
+				+ "\nPropiedades compradas: " + propiedadesCompradas + "\nPropiedades alquiladas="
+				+ propiedadesAlquiladas;
 	}
-	
-	
 
 }

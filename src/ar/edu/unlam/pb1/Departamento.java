@@ -7,8 +7,8 @@ public class Departamento extends Propiedad{
 	private Character departamento; 
 	
 	public Departamento(String calle, Integer numero, String localidad, Integer piso, Character departamento,
-			Double precio, Boolean estaDisponible, TipoDeOperacion tipoDeOperacion) {
-		super(calle, numero, localidad, precio, estaDisponible, tipoDeOperacion);
+			Double precio, Boolean estaDisponible, TipoDeOperacion tipoDeOperacion, Cliente propietario) {
+		super(calle, numero, localidad, precio, estaDisponible, tipoDeOperacion, propietario);
 		setCodigo("D" + contador++);
 		this.piso = piso;
 		this.departamento = departamento;

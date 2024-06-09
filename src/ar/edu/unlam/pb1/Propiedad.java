@@ -11,15 +11,27 @@ public abstract class Propiedad {
 	private Double precio;
 	private Boolean estaDisponible;
 	private TipoDeOperacion tipoDeOperacion;
+    private Cliente propietario;
+    private Cliente inquilino;
+
+
 	
 	public Propiedad(String calle, Integer numero, String localidad, Double precio,
-			Boolean estaDisponible, TipoDeOperacion tipoDeOperacion) {
+			Boolean estaDisponible, TipoDeOperacion tipoDeOperacion, Cliente propietario) {
+		if (codigo == null || codigo.isEmpty()) {
+            throw new IllegalArgumentException("El código no puede ser nulo o vacío");
+        }
+        if (precio < 0) {
+            throw new IllegalArgumentException("El precio no puede ser negativo");
+        }
 		this.calle = calle;
 		this.numero = numero;
 		this.localidad = localidad;
 		this.precio = precio;
 		this.estaDisponible = estaDisponible;
 		this.tipoDeOperacion = tipoDeOperacion;
+        this.propietario = propietario;
+        this.inquilino = null;
 	}
 
 	public String getCodigo() {
@@ -78,8 +90,24 @@ public abstract class Propiedad {
 		this.tipoDeOperacion = tipoDeOperacion;
 	}
 	
+	public Cliente getPropietario() {
+        return propietario;
+    }
+
+    public void setPropietario(Cliente propietario) {
+        this.propietario = propietario;
+    }
+
+	public Cliente getInquilino() {
+		return inquilino;
+	}
+
+	public void setInquilino(Cliente inquilino) {
+		this.inquilino = inquilino;
+	}
+	
     public String toString() {
-    	return this.codigo + (" Dirección: ") + this.calle + (" ") + this.numero;
+    	return this.codigo + ("\nDirección: ") + this.calle + (" ") + this.numero;
     }
     
     public Boolean estaDisponiblePara(TipoDeOperacion tipoDeOperacion) {

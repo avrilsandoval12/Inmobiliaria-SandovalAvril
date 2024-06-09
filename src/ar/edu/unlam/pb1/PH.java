@@ -6,8 +6,8 @@ public class PH extends Propiedad{
 	private Integer numeroDePH;
 	
 	public PH(String calle, Integer numero, String localidad, Integer numeroDePH, Double precio, Boolean estaDisponible,
-			TipoDeOperacion tipoDeOperacion) {
-		super(calle, numeroDePH, localidad, precio, estaDisponible, tipoDeOperacion);
+			TipoDeOperacion tipoDeOperacion, Cliente propietario) {
+		super(calle, numeroDePH, localidad, precio, estaDisponible, tipoDeOperacion, propietario);
 		setCodigo("PH" + contador++);
 		this.numeroDePH = numeroDePH;
 	}
