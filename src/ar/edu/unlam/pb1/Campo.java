@@ -7,7 +7,7 @@ public class Campo extends Propiedad{
 
 	public Campo(String calle, String localidad, Double hectareas, Double precio, Boolean estaDisponible,
 			TipoDeOperacion tipoDeOperacion, Integer numero, Cliente propietario) {
-		super(calle, numero, localidad, precio, estaDisponible, tipoDeOperacion, propietario);
+		super(calle, numero, localidad, precio, estaDisponible, tipoDeOperacion, TiposDePropiedades.CAMPO, propietario);
 		this.hectareas = hectareas;
 	}
 

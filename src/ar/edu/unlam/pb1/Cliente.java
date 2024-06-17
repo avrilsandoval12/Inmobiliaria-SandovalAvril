@@ -11,12 +11,11 @@ public class Cliente {
 	private Integer dni;
 	private String nombre;
 	private String apellido;
-	private TiposDePropiedades tipoPropiedadInteres;
 	private Boolean poseePropiedadParaPermuta;
 	private ArrayList<Propiedad> propiedadesCompradas;
 	private ArrayList<Propiedad> propiedadesAlquiladas;
 
-	public Cliente(Integer dni, String nombre, String apellido, TiposDePropiedades tipoPropiedadInteres,
+	public Cliente(Integer dni, String nombre, String apellido,
 			Boolean poseePropiedadParaPermuta) {
 		if (dni == null) {
 			throw new IllegalArgumentException("El DNI no puede ser nulo");
@@ -30,7 +29,6 @@ public class Cliente {
 		this.dni = dni;
 		this.nombre = nombre;
 		this.apellido = apellido;
-		this.tipoPropiedadInteres = tipoPropiedadInteres;
 		this.poseePropiedadParaPermuta = poseePropiedadParaPermuta;
 		this.propiedadesCompradas = new ArrayList<>();
 		this.propiedadesAlquiladas = new ArrayList<>();
@@ -58,14 +56,6 @@ public class Cliente {
 
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
-	}
-
-	public TiposDePropiedades getTipoPropiedadInteres() {
-		return tipoPropiedadInteres;
-	}
-
-	public void setTipoPropiedadInteres(TiposDePropiedades tipoPropiedadInteres) {
-		this.tipoPropiedadInteres = tipoPropiedadInteres;
 	}
 
 	public Boolean getPoseePropiedadParaPermuta() {
@@ -111,8 +101,7 @@ public class Cliente {
 
 	@Override
 	public String toString() {
-		return "Cliente: DNI: " + dni + "\nNombre Completo: " + apellido + nombre + "\nTipo de propiedad de interés: "
-				+ tipoPropiedadInteres + "\nPosee propiedad para permutar:" + poseePropiedadParaPermuta
+		return "Cliente: DNI: " + dni + "\nNombre Completo: " + apellido + nombre + "\nPosee propiedad para permutar:" + poseePropiedadParaPermuta
 				+ "\nPropiedades compradas: " + propiedadesCompradas + "\nPropiedades alquiladas="
 				+ propiedadesAlquiladas;
 	}

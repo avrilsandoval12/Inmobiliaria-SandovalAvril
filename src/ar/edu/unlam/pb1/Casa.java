@@ -6,10 +6,10 @@ public class Casa extends Propiedad {
 
     public Casa(String calle, Integer numero, String localidad, Double precio, Boolean estaDisponible,
     		TipoDeOperacion tipoDeOperacion, Cliente propietario) {
-        super(calle, numero, localidad, precio, estaDisponible, tipoDeOperacion, propietario);
+        super(calle, numero, localidad, precio, estaDisponible, tipoDeOperacion, TiposDePropiedades.CASA, propietario);
         setCodigo("CS" + contador++);
     }
-
+    
 	@Override
 	public String toString() {
 		return "Código: " + getCodigo() + "\nDirección: " + getCalle() + getNumero()

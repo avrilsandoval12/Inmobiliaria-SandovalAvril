@@ -7,7 +7,7 @@ public class Terreno extends Propiedad{
 
 	public Terreno(String calle, Integer numero, String localidad, Double metrosCuadrados,
 			 Double precio, Boolean estaDisponible, TipoDeOperacion tipoDeOperacion, Cliente propietario) {
-		super(calle, numero, localidad, precio, estaDisponible, tipoDeOperacion, propietario);
+		super(calle, numero, localidad, precio, estaDisponible, tipoDeOperacion, TiposDePropiedades.TERRENO, propietario);
 		setCodigo("T" + contador++);
 		this.metrosCuadrados = metrosCuadrados;
 	}

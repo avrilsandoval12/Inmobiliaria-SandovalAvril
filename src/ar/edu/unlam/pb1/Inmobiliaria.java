@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
 public class Inmobiliaria {
 
@@ -12,11 +13,7 @@ public class Inmobiliaria {
 	private String direccion;
 	private String eMail;
 	private Integer telefono;
-	private LinkedList<Casa> casas;
-	private LinkedList<Departamento> departamentos;
-	private LinkedList<PH> phs;
-	private LinkedList<Terreno> terrenos;
-	private LinkedList<Campo> campos;
+	private HashSet<Propiedad> propiedades;
 	private HashSet<Cliente> clientes;
 
 	public Inmobiliaria(String nombre, String direccion, String eMail, Integer telefono) {
@@ -24,10 +21,7 @@ public class Inmobiliaria {
 		this.direccion = direccion;
 		this.eMail = eMail;
 		this.telefono = telefono;
-		this.casas = new LinkedList<Casa>();
-		this.departamentos = new LinkedList<Departamento>();
-		this.phs = new LinkedList<PH>();
-		this.terrenos = new LinkedList<Terreno>();
+		this.propiedades = new HashSet<Propiedad>();
 		this.clientes = new HashSet<Cliente>();
 	}
 
@@ -63,44 +57,12 @@ public class Inmobiliaria {
 		this.telefono = telefono;
 	}
 	
-	public LinkedList<Casa> getCasas() {
-		return casas;
+	public HashSet<Propiedad> getPropiedades() {
+		return propiedades;
 	}
 
-	public void setCasas(LinkedList<Casa> casas) {
-		this.casas = casas;
-	}
-
-	public LinkedList<Departamento> getDepartamentos() {
-		return departamentos;
-	}
-
-	public void setDepartamentos(LinkedList<Departamento> departamentos) {
-		this.departamentos = departamentos;
-	}
-
-	public LinkedList<PH> getPhs() {
-		return phs;
-	}
-
-	public void setPhs(LinkedList<PH> phs) {
-		this.phs = phs;
-	}
-
-	public LinkedList<Terreno> getTerrenos() {
-		return terrenos;
-	}
-
-	public void setTerrenos(LinkedList<Terreno> terrenos) {
-		this.terrenos = terrenos;
-	}
-
-	public LinkedList<Campo> getCampos() {
-		return campos;
-	}
-
-	public void setCampos(LinkedList<Campo> campos) {
-		this.campos = campos;
+	public void setPropiedades(HashSet<Propiedad> propiedades) {
+		this.propiedades = propiedades;
 	}
 
 	public HashSet<Cliente> getClientes() {
@@ -111,22 +73,13 @@ public class Inmobiliaria {
 		this.clientes = clientes;
 	}
 
-	// añadir
 	public void aniadirPropiedad(Propiedad propiedad) {
-		if (propiedad instanceof Casa) {
-			casas.add((Casa) propiedad);
-		} else if (propiedad instanceof Departamento) {
-			departamentos.add((Departamento) propiedad);
-		} else if (propiedad instanceof PH) {
-			phs.add((PH) propiedad);
-		} else if (propiedad instanceof Terreno) {
-			terrenos.add((Terreno) propiedad);
-		} else if (propiedad instanceof Campo) {
-			campos.add((Campo) propiedad);
-		} else {
-			System.out.println("Tipo de propiedad no reconocido.");
-		}
+	    if (propiedad == null) {
+	        throw new IllegalArgumentException("La propiedad no puede ser nula");
+	    }
+	    propiedades.add(propiedad);
 	}
+
 
 	public Boolean aniadirCliente(Cliente clienteNuevo) {
 		if (clienteNuevo == null || clienteNuevo.getDni() == null) {
@@ -137,80 +90,60 @@ public class Inmobiliaria {
 
 	// buscar
 	public Propiedad buscarPropiedadPorCodigo(String codigo) {
-		for (Casa casa : casas) {
-			if (casa.getCodigo().equals(codigo)) {
-				return casa;
+		if (codigo == null || codigo.isEmpty()) {
+			throw new IllegalArgumentException("El código no puede ser nulo o vacío");	
+		}
+		
+		for (Propiedad propiedad : propiedades) {
+			if (propiedad.getCodigo().equals(codigo)) {
+				return propiedad;
 			}
 		}
-		for (Departamento departamento : departamentos) {
-			if (departamento.getCodigo().equals(codigo)) {
-				return departamento;
-			}
-		}
-		for (PH ph : phs) {
-			if (ph.getCodigo().equals(codigo)) {
-				return ph;
-			}
-		}
-		for (Terreno terreno : terrenos) {
-			if (terreno.getCodigo().equals(codigo)) {
-				return terreno;
-			}
-		}
-		for (Campo campo : campos) {
-			if (campo.getCodigo().equals(codigo)) {
-				return campo;
-			}
-		}
-		return null;
+		throw new NoSuchElementException("No se encontró una propiedad con el código: " + codigo);
 	}
 
 	public Cliente buscarClienePorDni(Integer dni) {
-		for (Cliente cliente : this.clientes) {
+		if (dni == null || dni == 0) {
+			throw new IllegalArgumentException("El DNI no puede ser nulo o 0 (cero)");	
+		}
+		
+		for (Cliente cliente : clientes) {
 			if (cliente.getDni().equals(dni)) {
 				return cliente;
 			}
 		}
-		return null;
+		throw new NoSuchElementException("No se encontró un cliente con el DNI: " + dni);
 	}
 
-	// mostrar propiedades según su tipo
-	public String mostrarPropiedades(TiposDePropiedades tipo) {
-		String resultado = "";
+	// mostrar propiedades
+	public String mostrarPropiedadesPorTipo(TiposDePropiedades tipoSolicitado) {
+	    String resultado = "";
 
-		switch (tipo) {
-		case CASA:
-			for (Casa casa : casas) {
-				resultado += casa.toString() + "\n";
-			}
-			break;
-		case DEPARTAMENTO:
-			for (Departamento departamento : departamentos) {
-				resultado += departamento.toString() + "\n";
-			}
-			break;
-		case PH:
-			for (PH ph : phs) {
-				resultado += ph.toString() + "\n";
-			}
-			break;
-		case TERRENO:
-			for (Terreno terreno : terrenos) {
-				resultado += terreno.toString() + "\n";
-			}
-			break;
-		case CAMPO:
-			for (Campo campo : campos) {
-				resultado += campo.toString() + "\n";
-			}
-			break;
-		default:
-			resultado = "Tipo de propiedad no reconocido.";
-			break;
-		}
+	    for (Propiedad propiedad : propiedades) {
+	        if (tipoSolicitado == null || propiedad.getTipoDePropiedad() == tipoSolicitado) {
+	            resultado += propiedad.toString() + "\n";
+	        }
+	    }
 
-		return resultado;
+	    if (resultado.isEmpty()) {
+	        throw new NoSuchElementException("No hay propiedades del tipo especificado.");
+	    }
+
+	    return resultado;
 	}
+	
+	public String mostrarPropiedades() {
+	    String resultado = "";
+
+	    for (TiposDePropiedades tipo : TiposDePropiedades.values()) {
+	        resultado += tipo.name() + ":\n";
+	        resultado += mostrarPropiedadesPorTipo(tipo);
+	        resultado += "\n";
+	    }
+
+	    return resultado;
+	}
+
 
 	// modificar
 	public void modificarDatosPropiedad(Propiedad propiedad, Integer datoAModificar, Object dato) {
