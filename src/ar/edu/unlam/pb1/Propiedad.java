@@ -17,11 +17,11 @@ public abstract class Propiedad {
 
 	public Propiedad(String calle, Integer numero, String localidad, Double precio,
 			Boolean estaDisponible, TipoDeOperacion tipoDeOperacion, TiposDePropiedades tipoDePropiedad, Cliente propietario) {
-        if (precio < 0) {
-            throw new IllegalArgumentException("El precio no puede ser negativo");
+        if (precio < 0 || precio == null) {
+            throw new IllegalArgumentException("El precio no puede ser negativo o nulo.");
         }
 		if (tipoDeOperacion == null) {
-            throw new IllegalArgumentException("El tipo de operación no puede ser nulo o vacío");
+            throw new IllegalArgumentException("El tipo de operación no puede ser nulo o vacío.");
         }
 		this.calle = calle;
 		this.numero = numero;

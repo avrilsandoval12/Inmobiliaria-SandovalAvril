@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
+import java.util.TreeSet;
 
 public class Inmobiliaria {
 
@@ -56,7 +57,7 @@ public class Inmobiliaria {
 	public void setTelefono(Integer telefono) {
 		this.telefono = telefono;
 	}
-	
+
 	public HashSet<Propiedad> getPropiedades() {
 		return propiedades;
 	}
@@ -74,12 +75,11 @@ public class Inmobiliaria {
 	}
 
 	public void aniadirPropiedad(Propiedad propiedad) {
-	    if (propiedad == null) {
-	        throw new IllegalArgumentException("La propiedad no puede ser nula");
-	    }
-	    propiedades.add(propiedad);
+		if (propiedad == null) {
+			throw new IllegalArgumentException("La propiedad no puede ser nula");
+		}
+		propiedades.add(propiedad);
 	}
-
 
 	public Boolean aniadirCliente(Cliente clienteNuevo) {
 		if (clienteNuevo == null || clienteNuevo.getDni() == null) {
@@ -91,9 +91,9 @@ public class Inmobiliaria {
 	// buscar
 	public Propiedad buscarPropiedadPorCodigo(String codigo) {
 		if (codigo == null || codigo.isEmpty()) {
-			throw new IllegalArgumentException("El código no puede ser nulo o vacío");	
+			throw new IllegalArgumentException("El código no puede ser nulo o vacío");
 		}
-		
+
 		for (Propiedad propiedad : propiedades) {
 			if (propiedad.getCodigo().equals(codigo)) {
 				return propiedad;
@@ -104,9 +104,9 @@ public class Inmobiliaria {
 
 	public Cliente buscarClienePorDni(Integer dni) {
 		if (dni == null || dni == 0) {
-			throw new IllegalArgumentException("El DNI no puede ser nulo o 0 (cero)");	
+			throw new IllegalArgumentException("El DNI no puede ser nulo o 0 (cero)");
 		}
-		
+
 		for (Cliente cliente : clientes) {
 			if (cliente.getDni().equals(dni)) {
 				return cliente;
@@ -117,378 +117,214 @@ public class Inmobiliaria {
 
 	// mostrar propiedades
 	public String mostrarPropiedadesPorTipo(TiposDePropiedades tipoSolicitado) {
-	    String resultado = "";
+		String resultado = "";
 
-	    for (Propiedad propiedad : propiedades) {
-	        if (tipoSolicitado == null || propiedad.getTipoDePropiedad() == tipoSolicitado) {
-	            resultado += propiedad.toString() + "\n";
-	        }
-	    }
+		for (Propiedad propiedad : propiedades) {
+			if (tipoSolicitado == null || propiedad.getTipoDePropiedad() == tipoSolicitado) {
+				resultado += propiedad.toString() + "\n";
+			}
+		}
 
-	    if (resultado.isEmpty()) {
-	        throw new NoSuchElementException("No hay propiedades del tipo especificado.");
-	    }
+		if (resultado.isEmpty()) {
+			throw new NoSuchElementException("No hay propiedades del tipo especificado.");
+		}
 
-	    return resultado;
+		return resultado;
 	}
-	
+
 	public String mostrarPropiedades() {
-	    String resultado = "";
+		String resultado = "";
 
-	    for (TiposDePropiedades tipo : TiposDePropiedades.values()) {
-	        resultado += tipo.name() + ":\n";
-	        resultado += mostrarPropiedadesPorTipo(tipo);
-	        resultado += "\n";
-	    }
+		for (TiposDePropiedades tipo : TiposDePropiedades.values()) {
+			resultado += tipo.name() + ":\n";
+			resultado += mostrarPropiedadesPorTipo(tipo);
+			resultado += "\n";
+		}
 
-	    return resultado;
+		return resultado;
 	}
-
 
 	// modificar
-	public void modificarDatosPropiedad(Propiedad propiedad, Integer datoAModificar, Object dato) {
+	public void modificarDatosPropiedad(String codigo, DatosAModificar datoAModificar, Object dato) {
+		Propiedad propiedad = buscarPropiedadPorCodigo(codigo);
 		switch (datoAModificar) {
-		case 1:
+		case CALLE:
+			if (!(dato instanceof String)) {
+				throw new IllegalArgumentException("La calle debe ser una cadena de texto.");
+			}
 			propiedad.setCalle((String) dato);
 			break;
-		case 2:
+		case NUMERO:
+			if (!(dato instanceof Integer)) {
+				throw new IllegalArgumentException("El número debe ser un entero.");
+			}
 			propiedad.setNumero((Integer) dato);
 			break;
-		case 3:
+		case LOCALIDAD:
+			if (!(dato instanceof String)) {
+				throw new IllegalArgumentException("La localidad debe ser una cadena de texto.");
+			}
 			propiedad.setLocalidad((String) dato);
 			break;
-		case 4:
-			propiedad.setPrecio((Double) dato);
-			break;
-		case 5:
+		case PRECIO:
+		    if (!(dato instanceof Double)) {
+		        throw new IllegalArgumentException("El precio debe ser un decimal (1000.0).");
+		    }
+		    propiedad.setPrecio((Double) dato);
+		    break;
+		case DISPONIBILIDAD:
+			if (!(dato instanceof Boolean)) {
+				throw new IllegalArgumentException(
+						"El estado de disponibilidad debe ser un valor booleano (true/false).");
+			}
 			propiedad.setEstaDisponible((Boolean) dato);
 			break;
-		case 6:
+		case TIPO_DE_OPERACION:
+			if (!(dato instanceof TipoDeOperacion)) {
+				throw new IllegalArgumentException(
+						"El tipo de operación debe ser una instancia de TipoDeOperacion (VENTA, ALQUILER, PERMUTA).");
+			}
 			propiedad.setTipoDeOperacion(TipoDeOperacion.valueOf((String) dato));
+			break;
+		default:
 			break;
 		}
 		if (propiedad instanceof Departamento) {
 			Departamento departamento = (Departamento) propiedad;
-			if (datoAModificar == 7) {
+			switch (datoAModificar) {
+			case PISO:
+				if (!(dato instanceof Integer)) {
+					throw new IllegalArgumentException("El piso debe ser un entero.");
+				}
 				departamento.setPiso((Integer) dato);
-			}
-			if (datoAModificar == 8) {
+				break;
+			case DEPARTAMENTO:
+				if (!(dato instanceof Character)) {
+					throw new IllegalArgumentException("El departamento debe ser una letra.");
+				}
 				departamento.setDepartamento((Character) dato);
+				break;
+			default:
+				break;
 			}
 		} else if (propiedad instanceof PH) {
 			PH ph = (PH) propiedad;
-			if (datoAModificar == 9) {
+			switch (datoAModificar) {
+			case NUMERO_PH:
+				if (!(dato instanceof Integer)) {
+					throw new IllegalArgumentException("El número del PH debe ser un entero.");
+				}
 				ph.setNumeroDePH((Integer) dato);
+				break;
+			default:
+				break;
 			}
 		} else if (propiedad instanceof Terreno) {
 			Terreno terreno = (Terreno) propiedad;
-			if (datoAModificar == 10) {
-				terreno.setMetrosCuadrados((Double) dato);
+			switch (datoAModificar) {
+			case METROS_CUADRADOS_TERRENO:
+			    if (!(dato instanceof Double)) {
+			        throw new IllegalArgumentException("La cantidad de metros cuadrados debe ser un decimal (1000.0).");
+			    }
+			    terreno.setMetrosCuadrados((Double) dato);
+			    break;
+			default:
+				break;
 			}
 		} else if (propiedad instanceof Campo) {
 			Campo campo = (Campo) propiedad;
-			if (datoAModificar == 11) {
+			switch (datoAModificar) {
+			case HECTAREAS_CAMPO:
+				if (!(dato instanceof Double)) {
+					throw new IllegalArgumentException("La cantidad de hectareas debe ser un decimal (1000.0).");
+				}
 				campo.setHectareas((Double) dato);
+				break;
+			default:
+				break;
 			}
 		}
 	}
 
-	// ordenar tipo propiedad por precio
-	public ArrayList<Casa> ordenarCasasPorPrecio() {
-		ArrayList<Casa> casasOrdenadas = new ArrayList<>(casas);
-		casasOrdenadas.sort(Comparator.comparingDouble(Casa::getPrecio));
-		return casasOrdenadas;
+	// ordenar por precio
+	public TreeSet<Propiedad> ordenarPropiedadesPorPrecio() {
+		TreeSet<Propiedad> propiedadesOrdenadas = new TreeSet<>(new OrdenarPropiedadesPorPrecio());
+		propiedadesOrdenadas.addAll(propiedades);
+		return propiedadesOrdenadas;
 	}
 
-	public ArrayList<Departamento> ordenarDepartamentosPorPrecio() {
-		ArrayList<Departamento> departamentosOrdenados = new ArrayList<>(departamentos);
-		departamentosOrdenados.sort(Comparator.comparingDouble(Departamento::getPrecio));
-		return departamentosOrdenados;
+	// ordenar por localidad
+	public TreeSet<Propiedad> ordenarPropiedadesPorLocalidad() {
+		TreeSet<Propiedad> propiedadesOrdenadas = new TreeSet<>(new OrdenarPropiedadesPorLocalidad());
+		propiedadesOrdenadas.addAll(propiedades);
+		return propiedadesOrdenadas;
 	}
 
-	public ArrayList<PH> ordenarPhsPorPrecio() {
-		ArrayList<PH> phsOrdenados = new ArrayList<>(phs);
-		phsOrdenados.sort(Comparator.comparingDouble(PH::getPrecio));
-		return phsOrdenados;
-	}
+	// buscar por rango de precio
+	public TreeSet<Propiedad> buscarPropiedadesPorRangoDePrecio(double precioMinimo, double precioMaximo) {
+		TreeSet<Propiedad> propiedadesEnRango = new TreeSet<>(new OrdenarPropiedadesPorPrecio());
 
-	public ArrayList<Terreno> ordenarTerrenosPorPrecio() {
-		ArrayList<Terreno> terrenosOrdenados = new ArrayList<>(terrenos);
-		terrenosOrdenados.sort(Comparator.comparingDouble(Terreno::getPrecio));
-		return terrenosOrdenados;
-	}
-
-	public ArrayList<Campo> ordenarCamposPorPrecio() {
-		ArrayList<Campo> camposOrdenados = new ArrayList<>(campos);
-		camposOrdenados.sort(Comparator.comparingDouble(Campo::getPrecio));
-		return camposOrdenados;
-	}
-
-	// ordenar tipo propiedad por localidad
-	public ArrayList<Casa> ordenarCasasPorLocalidad() {
-		ArrayList<Casa> casasOrdenadas = new ArrayList<>(casas);
-		casasOrdenadas.sort(Comparator.comparing(Casa::getLocalidad));
-		return casasOrdenadas;
-	}
-
-	public ArrayList<Departamento> ordenarDepartamentosPorLocalidad() {
-		ArrayList<Departamento> departamentosOrdenados = new ArrayList<>(departamentos);
-		departamentosOrdenados.sort(Comparator.comparing(Departamento::getLocalidad));
-		return departamentosOrdenados;
-	}
-
-	public ArrayList<PH> ordenarPhsPorLocalidad() {
-		ArrayList<PH> phsOrdenados = new ArrayList<>(phs);
-		phsOrdenados.sort(Comparator.comparing(PH::getLocalidad));
-		return phsOrdenados;
-	}
-
-	public ArrayList<Terreno> ordenarTerrenosPorLocalidad() {
-		ArrayList<Terreno> terrenosOrdenados = new ArrayList<>(terrenos);
-		terrenosOrdenados.sort(Comparator.comparing(Terreno::getLocalidad));
-		return terrenosOrdenados;
-	}
-
-	public ArrayList<Campo> ordenarCamposPorLocalidad() {
-		ArrayList<Campo> camposOrdenados = new ArrayList<>(campos);
-		camposOrdenados.sort(Comparator.comparing(Campo::getLocalidad));
-		return camposOrdenados;
-	}
-
-	// buscar tipo de propiedad por precio de precio
-	public LinkedList<Casa> buscarCasasPorRangoDePrecio(double precioMinimo, double precioMaximo) {
-		LinkedList<Casa> casasEnRango = new LinkedList<Casa>();
-		
-		for (Casa actualCasa : casas) {
-			if (actualCasa.getPrecio() >= precioMinimo && actualCasa.getPrecio() <= precioMaximo) {
-				casasEnRango.add(actualCasa);
+		for (Propiedad propiedad : propiedades) {
+			if (propiedad.getPrecio() >= precioMinimo && propiedad.getPrecio() <= precioMaximo) {
+				propiedadesEnRango.add(propiedad);
 			}
 		}
 
-		Collections.sort(casasEnRango, Comparator.comparingDouble(Casa::getPrecio));
-
-		return casasEnRango.isEmpty() ? null : casasEnRango;
+		return propiedadesEnRango;
 	}
 
-	public LinkedList<Departamento> buscarDepartamentosPorRangoDePrecio(double precioMinimo, double precioMaximo) {
-		LinkedList<Departamento> departamentosEnRango = new LinkedList<Departamento>();
+	// buscar por localidad
+	public TreeSet<Propiedad> buscarPropiedadesPorLocalidad(String localidad) {
+		TreeSet<Propiedad> propiedadesEnRango = new TreeSet<>(new OrdenarPropiedadesPorLocalidad());
 
-		for (Departamento actualDepartamento : departamentos) {
-			if (actualDepartamento.getPrecio() >= precioMinimo && actualDepartamento.getPrecio() <= precioMaximo) {
-				departamentosEnRango.add(actualDepartamento);
+		for (Propiedad propiedad : propiedades) {
+			if (propiedad.getLocalidad().equals(localidad)) {
+				propiedadesEnRango.add(propiedad);
 			}
 		}
 
-		Collections.sort(departamentosEnRango, Comparator.comparingDouble(Departamento::getPrecio));
-
-		return departamentosEnRango.isEmpty() ? null : departamentosEnRango;
+		return propiedadesEnRango;
 	}
 
-	public LinkedList<PH> buscarPhsPorRangoDePrecio(double precioMinimo, double precioMaximo) {
-		LinkedList<PH> phsEnRango = new LinkedList<PH>();
+	// operaciones
+	public void venderPropiedad(Propiedad propiedad, Cliente comprador) throws PropiedadNoDisponibleException {
+		Venta venta = new Venta();
+		venta.realizarOperacion(propiedad, comprador);
 
-		for (PH actualPh : phs) {
-			if (actualPh.getPrecio() >= precioMinimo && actualPh.getPrecio() <= precioMaximo) {
-				phsEnRango.add(actualPh);
-			}
-		}
-
-		Collections.sort(phsEnRango, Comparator.comparingDouble(PH::getPrecio));
-
-		return phsEnRango.isEmpty() ? null : phsEnRango;
 	}
 
-	public LinkedList<Terreno> buscarTerrenosPorRangoDePrecio(double precioMinimo, double precioMaximo) {
-		LinkedList<Terreno> terrenosEnRango = new LinkedList<Terreno>();
-
-		for (Terreno actualTerreno : terrenos) {
-			if (actualTerreno.getPrecio() >= precioMinimo && actualTerreno.getPrecio() <= precioMaximo) {
-				terrenosEnRango.add(actualTerreno);
-			}
-		}
-
-		Collections.sort(terrenosEnRango, Comparator.comparingDouble(Terreno::getPrecio));
-
-		return terrenosEnRango.isEmpty() ? null : terrenosEnRango;
+	public void alquilarPropiedad(Propiedad propiedad, Cliente inquilino) throws PropiedadNoDisponibleException {
+		Alquiler alquiler = new Alquiler();
+		alquiler.realizarOperacion(propiedad, inquilino);
 	}
 
-	public LinkedList<Campo> buscarCamposPorRangoDePrecio(double precioMinimo, double precioMaximo) {
-		LinkedList<Campo> camposEnRango = new LinkedList<Campo>();
-
-		for (Campo actualCampo : campos) {
-			if (actualCampo.getPrecio() >= precioMinimo && actualCampo.getPrecio() <= precioMaximo) {
-				camposEnRango.add(actualCampo);
-			}
-		}
-
-		Collections.sort(camposEnRango, Comparator.comparingDouble(Campo::getPrecio));
-
-		return camposEnRango.isEmpty() ? null : camposEnRango;
-	}
-
-	// buscar tipo de propiedad por localidad
-	public ArrayList<Casa> buscarCasasPorLocalidad(String localidadDeseada) {
-		ArrayList<Casa> casasConLocalidadBuscada = new ArrayList<Casa>();
-
-		for (Casa actualCasa : casas) {
-			if (actualCasa.getLocalidad().equals(localidadDeseada)) {
-				casasConLocalidadBuscada.add(actualCasa);
-			}
-		}
-
-		return casasConLocalidadBuscada.isEmpty() ? null : casasConLocalidadBuscada;
-	}
-
-	public ArrayList<Departamento> buscarDepartamentosPorLocalidad(String localidadDeseada) {
-		ArrayList<Departamento> departamentosConLocalidadBuscada = new ArrayList<Departamento>();
-
-		for (Departamento actualDepartamento : departamentos) {
-			if (actualDepartamento.getLocalidad().equals(localidadDeseada)) {
-				departamentosConLocalidadBuscada.add(actualDepartamento);
-			}
-		}
-
-		return departamentosConLocalidadBuscada.isEmpty() ? null : departamentosConLocalidadBuscada;
-	}
-
-	public ArrayList<PH> buscarPhsPorLocalidad(String localidadDeseada) {
-		ArrayList<PH> phsConLocalidadBuscada = new ArrayList<PH>();
-
-		for (PH actualPh : phs) {
-			if (actualPh.getLocalidad().equals(localidadDeseada)) {
-				phsConLocalidadBuscada.add(actualPh);
-			}
-		}
-
-		return phsConLocalidadBuscada.isEmpty() ? null : phsConLocalidadBuscada;
-	}
-
-	public ArrayList<Terreno> buscarTerrenosPorLocalidad(String localidadDeseada) {
-		ArrayList<Terreno> terrenosConLocalidadBuscada = new ArrayList<Terreno>();
-
-		for (Terreno actualTerreno : terrenos) {
-			if (actualTerreno.getLocalidad().equals(localidadDeseada)) {
-				terrenosConLocalidadBuscada.add(actualTerreno);
-			}
-		}
-
-		return terrenosConLocalidadBuscada.isEmpty() ? null : terrenosConLocalidadBuscada;
-	}
-
-	public ArrayList<Campo> buscarCamposPorLocalidad(String localidadDeseada) {
-		ArrayList<Campo> camposConLocalidadBuscada = new ArrayList<Campo>();
-
-		for (Campo actualCampo : campos) {
-			if (actualCampo.getLocalidad().equals(localidadDeseada)) {
-				camposConLocalidadBuscada.add(actualCampo);
-			}
-		}
-
-		return camposConLocalidadBuscada.isEmpty() ? null : camposConLocalidadBuscada;
-	}
-
-	// buscar tipo de propiedad por operacion
-	public ArrayList<Casa> buscarCasasPorOperacion(TipoDeOperacion operacionDeseada) {
-		ArrayList<Casa> casasPorOperacionBuscada = new ArrayList<Casa>();
-
-		for (Casa actualCasa : casas) {
-			if (actualCasa.getTipoDeOperacion().equals(operacionDeseada)) {
-				casasPorOperacionBuscada.add(actualCasa);
-			}
-		}
-
-		return casasPorOperacionBuscada.isEmpty() ? null : casasPorOperacionBuscada;
-	}
-
-	public ArrayList<Departamento> buscarDepartamentosPorOperacion(TipoDeOperacion operacionDeseada) {
-		ArrayList<Departamento> departamentosPorOperacionBuscada = new ArrayList<Departamento>();
-
-		for (Departamento actualDepartamento : departamentos) {
-			if (actualDepartamento.getTipoDeOperacion().equals(operacionDeseada)) {
-				departamentosPorOperacionBuscada.add(actualDepartamento);
-			}
-		}
-
-		return departamentosPorOperacionBuscada.isEmpty() ? null : departamentosPorOperacionBuscada;
-	}
-
-	public ArrayList<PH> buscarPhsPorOperacion(TipoDeOperacion operacionDeseada) {
-		ArrayList<PH> phsPorOperacionBuscada = new ArrayList<PH>();
-
-		for (PH actualPh : phs) {
-			if (actualPh.getTipoDeOperacion().equals(operacionDeseada)) {
-				phsPorOperacionBuscada.add(actualPh);
-			}
-		}
-
-		return phsPorOperacionBuscada.isEmpty() ? null : phsPorOperacionBuscada;
-	}
-
-	public ArrayList<Terreno> buscarTerrenosPorOperacion(TipoDeOperacion operacionDeseada) {
-		ArrayList<Terreno> terrenosPorOperacionBuscada = new ArrayList<Terreno>();
-
-		for (Terreno actualTerreno : terrenos) {
-			if (actualTerreno.getTipoDeOperacion().equals(operacionDeseada)) {
-				terrenosPorOperacionBuscada.add(actualTerreno);
-			}
-		}
-
-		return terrenosPorOperacionBuscada.isEmpty() ? null : terrenosPorOperacionBuscada;
-	}
-
-	public ArrayList<Campo> buscarCamposPorOperacion(TipoDeOperacion operacionDeseada) {
-		ArrayList<Campo> camposPorOperacionBuscada = new ArrayList<Campo>();
-
-		for (Campo actualCampo : campos) {
-			if (actualCampo.getTipoDeOperacion().equals(operacionDeseada)) {
-				camposPorOperacionBuscada.add(actualCampo);
-			}
-		}
-
-		return camposPorOperacionBuscada.isEmpty() ? null : camposPorOperacionBuscada;
+	public void permutarPropiedades(Propiedad propiedad1, Propiedad propiedad2, Cliente cliente1, Cliente cliente2)
+			throws PropiedadNoDisponibleException {
+		Permuta permuta = new Permuta();
+		permuta.realizarOperacion(propiedad1, propiedad2, cliente1, cliente2);
 	}
 
 	// calcular precio promedio de cada tipo de propiedad
-	public Double calcularPromedioPrecio(int tipoNumerico) {
-	    TiposDePropiedades tipo = TiposDePropiedades.values()[tipoNumerico - 1];
+	public Double calcularPromedioPrecio(TiposDePropiedades tipo) {
 		Double sumatoria = 0.0;
 		int contador = 0;
-
-		switch (tipo) {
-		case CASA:
-			for (Casa casa : casas) {
-				sumatoria += casa.getPrecio();
+		for (Propiedad propiedad : propiedades) {
+			if (propiedad.getTipoDePropiedad() == tipo) {
+				sumatoria += propiedad.getPrecio();
 				contador++;
 			}
-			break;
-		case DEPARTAMENTO:
-			for (Departamento departamento : departamentos) {
-				sumatoria += departamento.getPrecio();
-				contador++;
-			}
-			break;
-		case PH:
-			for (PH ph : phs) {
-				sumatoria += ph.getPrecio();
-				contador++;
-			}
-			break;
-		case TERRENO:
-			for (Terreno terreno : terrenos) {
-				sumatoria += terreno.getPrecio();
-				contador++;
-			}
-			break;
-		case CAMPO:
-			for (Campo campo : campos) {
-				sumatoria += campo.getPrecio();
-				contador++;
-			}
-			break;
-		default:
-			return null;
 		}
-
+		return (contador > 0) ? sumatoria / contador : 0.0;
+	}
+	
+	// calcular precio promedio general
+	public Double calcularPromedioPrecio() {
+		Double sumatoria = 0.0;
+		int contador = 0;
+		for (Propiedad propiedad : propiedades) {
+			sumatoria += propiedad.getPrecio();
+			contador++;
+		}
 		return (contador > 0) ? sumatoria / contador : 0.0;
 	}
 }
