@@ -22,7 +22,7 @@ public class Permuta implements Operacion {
             propiedad2.setEstaDisponible(false);
 
         } else {
-			throw new PropiedadNoDisponibleException();
+			throw new PropiedadNoDisponibleException("Las propiedades que está intentando permutar no se encuentran disponibles");
         }
     }
 

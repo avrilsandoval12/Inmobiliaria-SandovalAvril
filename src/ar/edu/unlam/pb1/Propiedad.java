@@ -2,7 +2,7 @@ package ar.edu.unlam.pb1;
 
 import java.util.Objects;
 
-public abstract class Propiedad {
+public abstract class Propiedad implements Comparable<Propiedad>{
 
 	private String codigo;
 	private String calle;
@@ -23,9 +23,9 @@ public abstract class Propiedad {
 		if (tipoDeOperacion == null) {
             throw new IllegalArgumentException("El tipo de operación no puede ser nulo o vacío.");
         }
-		this.calle = calle;
+		this.calle = calle.toLowerCase();
 		this.numero = numero;
-		this.localidad = localidad;
+		this.localidad = localidad.toLowerCase();
 		this.precio = precio;
 		this.estaDisponible = estaDisponible;
 		this.tipoDeOperacion = tipoDeOperacion;
@@ -138,6 +138,10 @@ public abstract class Propiedad {
 		Propiedad other = (Propiedad) obj;
 		return Objects.equals(codigo, other.codigo);
 	}
-    
-    
+	
+	//elimine la clase OrdenarPorPrecio, porque considero que el orden por precio es el orden natural    
+	@Override
+	public int compareTo(Propiedad otraPropiedad) {
+        return this.precio.compareTo(otraPropiedad.getPrecio());
+    }
 }

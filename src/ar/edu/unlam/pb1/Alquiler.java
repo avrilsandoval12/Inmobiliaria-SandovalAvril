@@ -15,7 +15,7 @@ public class Alquiler implements Operacion {
 			propiedad.setInquilino(inquilino);
 			propiedad.setEstaDisponible(false);
 		} else {
-			throw new PropiedadNoDisponibleException();
+			throw new PropiedadNoDisponibleException("La propiedad que está intentando alquilar no se encuentra disponible");
 		}
 	}
 }

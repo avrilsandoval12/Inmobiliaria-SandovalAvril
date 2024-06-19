@@ -15,7 +15,7 @@ public class Venta implements Operacion {
 			propiedad.setPropietario(comprador);
 			propiedad.setEstaDisponible(false);
 		} else {
-			throw new PropiedadNoDisponibleException();
+			throw new PropiedadNoDisponibleException("La propiedad que está intentando comprar no se encuentra disponible");
 		}		
 	}
 }

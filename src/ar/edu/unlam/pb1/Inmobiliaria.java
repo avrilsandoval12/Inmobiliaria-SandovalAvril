@@ -57,7 +57,7 @@ public class Inmobiliaria {
 	public void setTelefono(Integer telefono) {
 		this.telefono = telefono;
 	}
-
+	
 	public HashSet<Propiedad> getPropiedades() {
 		return propiedades;
 	}
@@ -74,12 +74,23 @@ public class Inmobiliaria {
 		this.clientes = clientes;
 	}
 
-	public void aniadirPropiedad(Propiedad propiedad) {
-		if (propiedad == null) {
-			throw new IllegalArgumentException("La propiedad no puede ser nula");
-		}
-		propiedades.add(propiedad);
-	}
+	public boolean clienteEstaRegistrado(Cliente cliente) {
+        return clientes.contains(cliente);
+    }
+
+    public boolean propiedadEstaRegistrada(Propiedad propiedad) {
+        return propiedades.contains(propiedad);
+    }
+
+    public void aniadirPropiedad(Propiedad propiedad) throws UmbralMinimoNoAlcanzadoException {
+        if (propiedad == null) {
+            throw new IllegalArgumentException("La propiedad no puede ser nula");
+        }
+        if (propiedad.getPrecio() < 10000.0) {
+            throw new UmbralMinimoNoAlcanzadoException("El precio de la propiedad está por debajo del umbral mínimo de 10000");
+        }
+        propiedades.add(propiedad);
+    }
 
 	public Boolean aniadirCliente(Cliente clienteNuevo) {
 		if (clienteNuevo == null || clienteNuevo.getDni() == null) {
@@ -248,7 +259,7 @@ public class Inmobiliaria {
 
 	// ordenar por precio
 	public TreeSet<Propiedad> ordenarPropiedadesPorPrecio() {
-		TreeSet<Propiedad> propiedadesOrdenadas = new TreeSet<>(new OrdenarPropiedadesPorPrecio());
+		TreeSet<Propiedad> propiedadesOrdenadas = new TreeSet<>();
 		propiedadesOrdenadas.addAll(propiedades);
 		return propiedadesOrdenadas;
 	}
@@ -261,20 +272,25 @@ public class Inmobiliaria {
 	}
 
 	// buscar por rango de precio
-	public TreeSet<Propiedad> buscarPropiedadesPorRangoDePrecio(double precioMinimo, double precioMaximo) {
-		TreeSet<Propiedad> propiedadesEnRango = new TreeSet<>(new OrdenarPropiedadesPorPrecio());
+	public TreeSet<Propiedad> buscarPropiedadesPorRangoDePrecio(double precioMinimo, double precioMaximo) throws SinResultadosException {
+		TreeSet<Propiedad> propiedadesEnRango = new TreeSet<>();
 
 		for (Propiedad propiedad : propiedades) {
 			if (propiedad.getPrecio() >= precioMinimo && propiedad.getPrecio() <= precioMaximo) {
 				propiedadesEnRango.add(propiedad);
 			}
 		}
+		
+		if (propiedadesEnRango.isEmpty()) {
+	        throw new SinResultadosException("No se encontraron propiedades en el rango desde " + precioMinimo + " hasta " + precioMaximo);
+	    }
+		
 
 		return propiedadesEnRango;
 	}
 
 	// buscar por localidad
-	public TreeSet<Propiedad> buscarPropiedadesPorLocalidad(String localidad) {
+	public TreeSet<Propiedad> buscarPropiedadesPorLocalidad(String localidad) throws SinResultadosException {
 		TreeSet<Propiedad> propiedadesEnRango = new TreeSet<>(new OrdenarPropiedadesPorLocalidad());
 
 		for (Propiedad propiedad : propiedades) {
@@ -283,23 +299,46 @@ public class Inmobiliaria {
 			}
 		}
 
+		if (propiedadesEnRango.isEmpty()) {
+	        throw new SinResultadosException("No se encontraron propiedades en la localidad: " + localidad);
+	    }
+		
 		return propiedadesEnRango;
 	}
 
 	// operaciones
-	public void venderPropiedad(Propiedad propiedad, Cliente comprador) throws PropiedadNoDisponibleException {
-		Venta venta = new Venta();
-		venta.realizarOperacion(propiedad, comprador);
-
+	public void venderPropiedad(Propiedad propiedad, Cliente comprador) throws PropiedadNoDisponibleException, ClienteNoRegistradoException, PropiedadNoRegistradaException {
+	    if (!clienteEstaRegistrado(comprador)) {
+	        throw new ClienteNoRegistradoException("El comprador no está registrado en la inmobiliaria.");
+	    }
+	    if (!propiedadEstaRegistrada(propiedad)) {
+	        throw new PropiedadNoRegistradaException("La propiedad no está registrada en la inmobiliaria.");
+	    }
+	    Venta venta = new Venta();
+	    venta.realizarOperacion(propiedad, comprador);
 	}
 
-	public void alquilarPropiedad(Propiedad propiedad, Cliente inquilino) throws PropiedadNoDisponibleException {
+
+
+	public void alquilarPropiedad(Propiedad propiedad, Cliente inquilino) throws PropiedadNoDisponibleException, ClienteNoRegistradoException, PropiedadNoRegistradaException {
+		if (!clienteEstaRegistrado(inquilino)) {
+	        throw new ClienteNoRegistradoException("El inquilino no está registrado en la inmobiliaria.");
+	    }
+	    if (!propiedadEstaRegistrada(propiedad)) {
+	        throw new PropiedadNoRegistradaException("La propiedad no está registrada en la inmobiliaria.");
+	    }
 		Alquiler alquiler = new Alquiler();
 		alquiler.realizarOperacion(propiedad, inquilino);
 	}
 
 	public void permutarPropiedades(Propiedad propiedad1, Propiedad propiedad2, Cliente cliente1, Cliente cliente2)
-			throws PropiedadNoDisponibleException {
+			throws PropiedadNoDisponibleException, ClienteNoRegistradoException, PropiedadNoRegistradaException {
+		if (!clienteEstaRegistrado(cliente1) || !clienteEstaRegistrado(cliente2)) {
+	        throw new ClienteNoRegistradoException("El cliente no está registrado en la inmobiliaria.");
+	    }
+	    if (!propiedadEstaRegistrada(propiedad1) || !propiedadEstaRegistrada(propiedad2)) {
+	        throw new PropiedadNoRegistradaException("La propiedad no está registrada en la inmobiliaria.");
+	    }
 		Permuta permuta = new Permuta();
 		permuta.realizarOperacion(propiedad1, propiedad2, cliente1, cliente2);
 	}
