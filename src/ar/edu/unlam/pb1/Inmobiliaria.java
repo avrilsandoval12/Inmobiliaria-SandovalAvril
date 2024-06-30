@@ -1,5 +1,6 @@
 package ar.edu.unlam.pb1;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -16,6 +17,7 @@ public class Inmobiliaria {
 	private Integer telefono;
 	private HashSet<Propiedad> propiedades;
 	private HashSet<Cliente> clientes;
+	private ArrayList<Operacion> historialOperaciones;
 
 	public Inmobiliaria(String nombre, String direccion, String eMail, Integer telefono) {
 		this.nombre = nombre;
@@ -24,6 +26,7 @@ public class Inmobiliaria {
 		this.telefono = telefono;
 		this.propiedades = new HashSet<Propiedad>();
 		this.clientes = new HashSet<Cliente>();
+        this.historialOperaciones = new ArrayList<>();
 	}
 
 	public String getNombre() {
@@ -72,6 +75,14 @@ public class Inmobiliaria {
 
 	public void setClientes(HashSet<Cliente> clientes) {
 		this.clientes = clientes;
+	}
+	
+	public ArrayList<String> getHistorialOperaciones() {
+	    ArrayList<String> operacionesString = new ArrayList<>();
+	    for (Operacion operacion : historialOperaciones) {
+	        operacionesString.add(operacion.toString());
+	    }
+	    return operacionesString;
 	}
 
 	public boolean clienteEstaRegistrado(Cliente cliente) {
@@ -314,8 +325,10 @@ public class Inmobiliaria {
 	    if (!propiedadEstaRegistrada(propiedad)) {
 	        throw new PropiedadNoRegistradaException("La propiedad no está registrada en la inmobiliaria.");
 	    }
-	    Venta venta = new Venta();
-	    venta.realizarOperacion(propiedad, comprador);
+	    Venta venta = new Venta(propiedad, propiedad.getPropietario(), comprador, LocalDate.now());
+	    venta.realizarOperacion(propiedad, comprador, LocalDate.now());
+	    
+	    historialOperaciones.add(venta);
 	}
 
 
@@ -327,8 +340,10 @@ public class Inmobiliaria {
 	    if (!propiedadEstaRegistrada(propiedad)) {
 	        throw new PropiedadNoRegistradaException("La propiedad no está registrada en la inmobiliaria.");
 	    }
-		Alquiler alquiler = new Alquiler();
-		alquiler.realizarOperacion(propiedad, inquilino);
+		Alquiler alquiler = new Alquiler(propiedad, propiedad.getPropietario(), inquilino, LocalDate.now());
+		alquiler.realizarOperacion(propiedad, inquilino, LocalDate.now());
+		
+	    historialOperaciones.add(alquiler);
 	}
 
 	public void permutarPropiedades(Propiedad propiedad1, Propiedad propiedad2, Cliente cliente1, Cliente cliente2)
@@ -339,10 +354,37 @@ public class Inmobiliaria {
 	    if (!propiedadEstaRegistrada(propiedad1) || !propiedadEstaRegistrada(propiedad2)) {
 	        throw new PropiedadNoRegistradaException("La propiedad no está registrada en la inmobiliaria.");
 	    }
-		Permuta permuta = new Permuta();
-		permuta.realizarOperacion(propiedad1, propiedad2, cliente1, cliente2);
+		Permuta permuta = new Permuta(propiedad1, propiedad2, cliente1, cliente2, LocalDate.now());
+		permuta.realizarOperacion(propiedad1, propiedad2, cliente1, cliente2, LocalDate.now());
+		
+	    historialOperaciones.add(permuta);
 	}
+	
+	public ArrayList<String> buscarOperacionesPorCodigoPropiedad(String codigoPropiedad) {
+        ArrayList<String> resultados = new ArrayList<>();
 
+        for (Operacion operacion : historialOperaciones) {
+            if (operacion instanceof Venta) {
+                Venta venta = (Venta) operacion;
+                if (venta.getPropiedad().getCodigo().equals(codigoPropiedad)) {
+                    resultados.add(venta.toString());
+                }
+            } else if (operacion instanceof Alquiler) {
+                Alquiler alquiler = (Alquiler) operacion;
+                if (alquiler.getPropiedad().getCodigo().equals(codigoPropiedad)) {
+                    resultados.add(alquiler.toString());
+                }
+            } else if (operacion instanceof Permuta) {
+                Permuta permuta = (Permuta) operacion;
+                if (permuta.getPropiedad().getCodigo().equals(codigoPropiedad) || permuta.getPropiedad2().getCodigo().equals(codigoPropiedad)) {
+                    resultados.add(permuta.toString());
+                }
+            }
+        }
+
+        return resultados;
+    }
+	
 	// calcular precio promedio de cada tipo de propiedad
 	public Double calcularPromedioPrecio(TiposDePropiedades tipo) {
 		Double sumatoria = 0.0;

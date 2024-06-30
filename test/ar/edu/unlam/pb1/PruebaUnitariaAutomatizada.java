@@ -12,9 +12,6 @@ import org.junit.rules.ExpectedException;
 
 public class PruebaUnitariaAutomatizada {
 
-	// según mi lógica de negocio aquellos clientes que poseen
-	// una propiedad que registrarán en la Inmobiliaria deben ser registrados
-	// previamente
 	@Test
 	public void queSePuedaDarDeAltaUnaCasaEnLaInmobiliaria() throws UmbralMinimoNoAlcanzadoException {
 		final Integer DIMENSION_DEL_ARRAY_ESPERADA = 1;
@@ -235,6 +232,26 @@ public class PruebaUnitariaAutomatizada {
 		assertFalse(departamento.getEstaDisponible());
 		assertTrue(comprador.getPropiedadesCompradas().contains(departamento));
 	}
+	
+	@Test
+    public void queSeGuardenOperacionesEnElHistorial() throws PropiedadNoDisponibleException, ClienteNoRegistradoException, PropiedadNoRegistradaException, UmbralMinimoNoAlcanzadoException {
+        Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av.Rivadavia", "sandoval@inmobiliaria.com",
+                1122334455);
+
+        Cliente propietario = new Cliente(11222333, "Pedro", "Martinez", false);
+        Cliente comprador = new Cliente(77777888, "Sofia", "Ramos", false);
+        Propiedad departamento = new Departamento("Alberdi", 640, "Haedo", 2, 'D', 25000.0, true, TipoDeOperacion.VENTA,
+                propietario);
+
+        inmobiliariaActual.aniadirCliente(comprador);
+        inmobiliariaActual.aniadirCliente(propietario);
+        inmobiliariaActual.aniadirPropiedad(departamento);
+
+        inmobiliariaActual.venderPropiedad(departamento, comprador);
+
+        assertEquals(1, inmobiliariaActual.getHistorialOperaciones().size());
+        assertTrue(inmobiliariaActual.getHistorialOperaciones().get(0).toString().contains("Venta de propiedad"));
+    }
 
 	@Test(expected = ClienteNoRegistradoException.class)
 	public void queNoSePuedaRealizarLaVentaDeUnaPropiedadSiElCompradorNoEstaRegistrado()
@@ -578,4 +595,82 @@ public class PruebaUnitariaAutomatizada {
 		assertNotNull(casasEncontradas);
 		assertEquals(cantidadCasasEncontradas, (Integer) casasEncontradas.size());
 	}
+	
+	@Test
+    public void queSeGuardenDosOperacionesDeVentaDeLaMismaPropiedadEnElHistorial() throws PropiedadNoDisponibleException, ClienteNoRegistradoException, PropiedadNoRegistradaException, UmbralMinimoNoAlcanzadoException {
+        Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av.Rivadavia", "sandoval@inmobiliaria.com",
+                1122334455);
+        Cliente propietario = new Cliente(11222333, "Pedro", "Martinez", false);
+        Cliente comprador1 = new Cliente(77777888, "Sofia", "Ramos", false);
+        Cliente comprador2 = new Cliente(99999111, "Juan", "García", false);
+        Propiedad departamento = new Departamento("Alberdi", 640, "Haedo", 2, 'D', 25000.0, true, TipoDeOperacion.VENTA,
+                propietario);
+
+        inmobiliariaActual.aniadirCliente(comprador1);
+        inmobiliariaActual.aniadirCliente(comprador2);
+        inmobiliariaActual.aniadirCliente(propietario);
+        inmobiliariaActual.aniadirPropiedad(departamento);
+        inmobiliariaActual.venderPropiedad(departamento, comprador1);
+        departamento.setEstaDisponible(true);
+        inmobiliariaActual.venderPropiedad(departamento, comprador2);
+        
+        ArrayList<String> resultados = inmobiliariaActual.buscarOperacionesPorCodigoPropiedad(departamento.getCodigo());
+
+        assertEquals(2, resultados.size());
+        assertTrue(resultados.get(0).contains("Venta de propiedad"));
+        assertTrue(resultados.get(1).contains("Venta de propiedad"));
+    }
+	
+	@Test
+    public void queSeGuardenDosOperacionesUnaDeVentaYUnaDeAlquilerDeLaMismaPropiedadEnElHistorial() throws PropiedadNoDisponibleException, ClienteNoRegistradoException, PropiedadNoRegistradaException, UmbralMinimoNoAlcanzadoException {
+        Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av.Rivadavia", "sandoval@inmobiliaria.com",
+                1122334455);
+        Cliente propietario = new Cliente(11222333, "Pedro", "Martinez", false);
+        Cliente comprador = new Cliente(77777888, "Sofia", "Ramos", false);
+        Cliente inquilino = new Cliente(99999111, "Juan", "García", false);
+        Propiedad departamento = new Departamento("Alberdi", 640, "Haedo", 2, 'D', 25000.0, true, TipoDeOperacion.VENTA,
+                propietario);
+
+        inmobiliariaActual.aniadirCliente(propietario);
+        inmobiliariaActual.aniadirCliente(comprador);
+        inmobiliariaActual.aniadirCliente(inquilino);
+        inmobiliariaActual.aniadirPropiedad(departamento);
+        inmobiliariaActual.venderPropiedad(departamento, comprador);
+        departamento.setTipoDeOperacion(TipoDeOperacion.ALQUILER);
+        departamento.setEstaDisponible(true);
+        inmobiliariaActual.alquilarPropiedad(departamento, inquilino);
+        
+        ArrayList<String> resultados = inmobiliariaActual.buscarOperacionesPorCodigoPropiedad(departamento.getCodigo());
+
+        assertEquals(2, resultados.size());
+        assertTrue(resultados.get(0).contains("Venta de propiedad"));
+        assertTrue(resultados.get(1).contains("Alquiler de propiedad"));
+    }
+	
+	@Test
+    public void queSeGuardeUnaOperacionDePermutaEnElHistorial() throws PropiedadNoDisponibleException, ClienteNoRegistradoException, PropiedadNoRegistradaException, UmbralMinimoNoAlcanzadoException {
+        Inmobiliaria inmobiliariaActual = new Inmobiliaria("Sandoval", "Av.Rivadavia", "sandoval@inmobiliaria.com",
+                1122334455);
+        Cliente propietario1 = new Cliente(11222333, "Pedro", "Martinez", false);
+        Cliente propietario2 = new Cliente(99999111, "Juan", "García", false);
+        Propiedad propiedad1 = new Departamento("Alberdi", 640, "Haedo", 2, 'D', 25000.0, true, TipoDeOperacion.PERMUTA,
+                propietario1);
+        Propiedad propiedad2 = new Casa("San Martín", 123, "Morón", 300000.0, true, TipoDeOperacion.PERMUTA,
+                propietario2);
+
+        inmobiliariaActual.aniadirCliente(propietario1);
+        inmobiliariaActual.aniadirCliente(propietario2);
+        inmobiliariaActual.aniadirPropiedad(propiedad1);
+        inmobiliariaActual.aniadirPropiedad(propiedad2);
+
+        inmobiliariaActual.permutarPropiedades(propiedad1, propiedad2, propietario1, propietario2);
+
+        ArrayList<String> resultados1 = inmobiliariaActual.buscarOperacionesPorCodigoPropiedad(propiedad1.getCodigo());
+        ArrayList<String> resultados2 = inmobiliariaActual.buscarOperacionesPorCodigoPropiedad(propiedad2.getCodigo());
+
+        assertEquals(1, resultados1.size());
+        assertEquals(1, resultados2.size());
+        assertTrue(resultados1.get(0).contains("Permuta de propiedad"));
+        assertTrue(resultados2.get(0).contains("Permuta de propiedad"));
+    }
 }

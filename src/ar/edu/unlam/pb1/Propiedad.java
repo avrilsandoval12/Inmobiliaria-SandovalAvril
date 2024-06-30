@@ -3,7 +3,7 @@ package ar.edu.unlam.pb1;
 import java.util.Objects;
 
 public abstract class Propiedad implements Comparable<Propiedad>{
-
+	
 	private String codigo;
 	private String calle;
 	private Integer numero;
@@ -139,7 +139,6 @@ public abstract class Propiedad implements Comparable<Propiedad>{
 		return Objects.equals(codigo, other.codigo);
 	}
 	
-	//elimine la clase OrdenarPorPrecio, porque considero que el orden por precio es el orden natural    
 	@Override
 	public int compareTo(Propiedad otraPropiedad) {
         return this.precio.compareTo(otraPropiedad.getPrecio());
